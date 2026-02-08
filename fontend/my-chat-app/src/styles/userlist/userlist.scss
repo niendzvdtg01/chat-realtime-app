@@ -1,6 +1,11 @@
 $searchColor: #ebecf0;
 
+.user-list-layout {
+    width: 100%;
+}
+
 .contact-search {
+    width: 100%;
     height: 64px;
     min-height: 64px;
     background-color: #fff;
@@ -13,7 +18,34 @@ $searchColor: #ebecf0;
     background-color: $searchColor;
     border: none;
     height: 2rem;
-    width: 16rem;
+    width: 13rem;
     border-radius: 16px;
     padding: 0 2rem;
+}
+
+.add-user {
+    gap: 10px;
+}
+
+.icon-btn {
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    padding: 6px;
+    border-radius: 4px;
+    transition: 0.2s ease;
+}
+
+.icon-btn img {
+    width: 2rem;
+    border-radius: 6px;
+}
+
+.icon-btn img:hover {
+    background-color: #eaeaea;
+}
+
+.user-list {
+    max-height: 100vh;
+    overflow-y: auto;
 }
