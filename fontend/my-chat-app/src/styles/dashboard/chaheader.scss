@@ -1,0 +1,16 @@
+.chat-header {
+    min-height: 64px;
+    width: 96rem;
+    margin-left: 20rem;
+}
+
+.user-img img {
+    max-width: 3.3rem;
+    margin-left: 10rem;
+    border: 1px solid #ccc;
+}
+
+.user-img {
+    display: flex;
+    align-items: center;
+}

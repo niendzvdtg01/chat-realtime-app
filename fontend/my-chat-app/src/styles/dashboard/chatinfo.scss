@@ -1,0 +1,19 @@
+.chat-info {
+    box-sizing: border-box;
+    overflow: hidden;
+    z-index: 3;
+    width: 100%;
+    height: 100%;
+    margin-right: auto;
+}
+
+.chat-info-header {
+    width: 25rem;
+    max-height: 64px;
+    justify-content: center;
+    align-items: center;
+}
+
+.chat-info-header h2 {
+    margin: 1rem;
+}

@@ -1,4 +1,4 @@
-import '../styles/userlist/userlist.scss'
+import '../styles/dashboard/userlist.scss'
 import addUser from '../assets/dashboard/user-plus-solid-full.svg'
 import groupUser from '../assets/dashboard/users-solid-full.svg'
 import { UserCard } from './UsersCard'
