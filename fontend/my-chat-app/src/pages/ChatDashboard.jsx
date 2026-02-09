@@ -10,7 +10,7 @@ export default function ChatDashBoard() {
                 <Verticalbar />
                 <UserList />
             </div>
-            <div className="d-flex">
+            <div className="d-flex ">
                 <ChatHeader />
                 <ChatInfo />
             </div>
