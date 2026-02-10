@@ -3,12 +3,12 @@ $chatviewColor: #ebecf0;
 .chat-message {
     max-height: 64px;
     width: 96rem;
-    margin-left: 26rem;
+    margin-left: 24rem;
 }
 
 .user-img img {
     max-width: 3.3rem;
-    margin-left: 3rem;
+    margin-left: 2.5rem;
     border: 1px solid #ccc;
 }
 
@@ -39,10 +39,9 @@ $chatviewColor: #ebecf0;
 
 .chat-input {
     border-top: 1px solid #ccc;
-    margin-left: 20px;
     position: relative;
     height: 8vh;
-    width: 98%;
+    width: 100%;
 
     .chat-input-group {
         gap: 10px;
@@ -55,7 +54,7 @@ $chatviewColor: #ebecf0;
             position: relative;
             width: 85%;
             height: 3rem;
-            border-radius: 20px;
+            border-radius: 30px;
             padding: 0 16px;
             background-color: #ccc;
             border: none;
@@ -68,7 +67,7 @@ $chatviewColor: #ebecf0;
 
             width: 7%;
             height: 3rem;
-            border-radius: 20px;
+            border-radius: 30px;
             border: none;
             background-color: #005ae0;
         }

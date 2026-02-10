@@ -48,7 +48,7 @@ export const UserList = () => {
                     </button>
                 </div>
             </div>
-            <div className='user-list'>
+            <div className='user-list border'>
                 <ul className="list-group list-group-light" >
                     {users.map((u, index) => (
                         <UserCard name={u.name} email={u.email} />
