@@ -6,6 +6,8 @@ public class UserCreation {
     private String password;
     private String avatarUrl;
     private String bio;
+    private String firstName;
+    private String lastName;
 
     public Integer getUserId() {
         return this.userId;
@@ -47,4 +49,19 @@ public class UserCreation {
         this.bio = bio;
     }
 
+    public String getFirstName() {
+        return this.firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return this.lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
 }

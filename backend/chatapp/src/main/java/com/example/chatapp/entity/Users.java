@@ -22,13 +22,20 @@ public class Users {
     private String avatarUrl;
     @Column(name = "bio")
     private String bio;
+    @Column(name = "first_name")
+    private String firstName;
+    @Column(name = "last_name")
+    private String lastName;
 
-    public Users(Integer userId, String email, String password, String avatarUrl, String bio) {
+    public Users(Integer userId, String email, String password, String avatarUrl, String bio, String firstName,
+            String lastName) {
         this.userId = userId;
         this.email = email;
         this.password = password;
         this.avatarUrl = avatarUrl;
         this.bio = bio;
+        this.firstName = firstName;
+        this.lastName = lastName;
     }
 
     public Users() {
@@ -74,4 +81,21 @@ public class Users {
     public void setBio(String bio) {
         this.bio = bio;
     }
+
+    public String getFirstName() {
+        return this.firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return this.lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
 }

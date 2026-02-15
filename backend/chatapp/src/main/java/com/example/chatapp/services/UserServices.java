@@ -20,6 +20,8 @@ public class UserServices {
         user.setPassword(requests.getPassword());
         user.setAvatarUrl(requests.getAvatarUrl());
         user.setBio(requests.getBio());
+        user.setFirstName(requests.getFirstName());
+        user.setLastName(requests.getLastName());
         return usersRespository.save(user);
     }
 }
