@@ -1,39 +1,56 @@
-import { Client } from "@stomp/stompjs";
 import SockJS from "sockjs-client";
+import { Client } from "@stomp/stompjs";
 
 class WebSocketService {
+
     constructor() {
         this.client = null;
+        this.connected = false;
     }
 
-    connect(onMessageReceived) {
-        const socket = new SockJS("http://localhost:8080/chat");
+    connect(onMessage) {
+
+        const socket = new SockJS("http://localhost:8080/ws");
+
         this.client = new Client({
             webSocketFactory: () => socket,
             reconnectDelay: 5000
         });
 
         this.client.onConnect = () => {
-            console.log("Web socket connected!");
 
-            this.client.subscribe("/topic/messages", (messages) => {
-                const data = JSON.parse(messages);
-                onMessageReceived(data);
+            console.log("STOMP Connected");
+            this.connected = true;
+
+            this.client.subscribe("/topic/messages", (message) => {
+                onMessage(JSON.parse(message.body));
             });
         };
+
+        this.client.onDisconnect = () => {
+            this.connected = false;
+        };
+
         this.client.activate();
     }
 
-    sendMessage(messages) {
-        if (!this.client) return;
+    sendMessage(message) {
+
+        if (!this.connected) {
+            console.log("STOMP not connected yet");
+            return;
+        }
+
         this.client.publish({
-            destination: "app/sendMessage",
-            body: JSON.stringify(messages)
-        })
+            destination: "/app/sendMessage",
+            body: JSON.stringify(message)
+        });
     }
+
     disconnect() {
-        if (!this.client) {
+        if (this.client) {
             this.client.deactivate();
+            this.connected = false;
         }
     }
 }

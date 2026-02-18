@@ -4,8 +4,9 @@ import App from './App.jsx'
 import './index.css'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { BrowserRouter } from 'react-router-dom';
+import global from "global";
 
-
+window.global = global;
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <BrowserRouter>

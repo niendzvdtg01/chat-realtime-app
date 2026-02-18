@@ -12,4 +12,12 @@ export const useChat = () => {
             WebSocketService.disconnect();
         }
     }, []);
+
+    const sendMessage = (msg) => {
+        WebSocketService.sendMessage(msg);
+    };
+    return {
+        message,
+        sendMessage
+    }
 }
