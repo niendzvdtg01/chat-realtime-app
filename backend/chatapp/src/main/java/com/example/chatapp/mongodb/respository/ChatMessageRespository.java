@@ -1,4 +1,4 @@
-package com.example.chatapp.reponsitory;
+package com.example.chatapp.mongodb.respository;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
 

@@ -4,7 +4,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.chatapp.dto.UserCreation;
 import com.example.chatapp.entity.Users;
-import com.example.chatapp.reponsitory.UsersRespository;
+import com.example.chatapp.jpa.respository.UsersRespository;
 
 @Service
 public class UserServices {

@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.chatapp.dto.UserCreation;
 import com.example.chatapp.entity.Users;
-import com.example.chatapp.reponsitory.UsersRespository;
+import com.example.chatapp.jpa.respository.UsersRespository;
 import com.example.chatapp.services.UserServices;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

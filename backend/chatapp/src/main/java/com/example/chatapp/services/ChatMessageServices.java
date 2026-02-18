@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.chatapp.MongodbModel.MessageDocument;
-import com.example.chatapp.reponsitory.ChatMessageRespository;
+import com.example.chatapp.mongodb.respository.ChatMessageRespository;
 
 @Service
 public class ChatMessageServices {

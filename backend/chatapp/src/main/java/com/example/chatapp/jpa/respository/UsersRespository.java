@@ -1,4 +1,4 @@
-package com.example.chatapp.reponsitory;
+package com.example.chatapp.jpa.respository;
 
 import java.util.List;
 
