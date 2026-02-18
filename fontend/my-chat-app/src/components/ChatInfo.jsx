@@ -15,7 +15,7 @@ export const ChatInfo = () => {
                         <h3 style={{ margin: "0 auto" }}>User or Group info</h3>
                     </div>
                     <div>
-                        <ul class="list-group mt-5">
+                        <ul class="list-group mt-5" style={{ borderRadius: "0" }}>
                             <li class="list-group-item">An item</li>
                             <li class="list-group-item">A second item</li>
                             <li class="list-group-item">A third item</li>

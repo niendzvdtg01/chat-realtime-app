@@ -2,7 +2,7 @@ package com.example.chatapp.MongodbModel;
 
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import jakarta.persistence.Id;
+import org.springframework.data.annotation.Id;
 
 @Document(collection = "messages")
 public class MessageDocument {
