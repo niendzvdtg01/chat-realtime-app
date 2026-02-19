@@ -1,0 +1,25 @@
+package com.example.chatapp.security;
+
+import java.util.Date;
+
+import javax.crypto.SecretKey;
+
+import com.example.chatapp.entity.Users;
+
+import io.jsonwebtoken.Jwts;
+
+public class jwtUtils {
+    private static final SecretKey SECRET_KEY = Jwts.SIG.HS512.key().build();
+    private static final long EXPIRATION_TIME = 36000000;
+
+    public static String generateToken(Users user) {
+        return Jwts.builder()
+                .subject(user.getEmail())
+                .claim("userId", user.getUserId())
+                .issuer("Niendz")
+                .issuedAt(new Date())
+                .expiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
+                .signWith(SECRET_KEY)
+                .compact();
+    }
+}
