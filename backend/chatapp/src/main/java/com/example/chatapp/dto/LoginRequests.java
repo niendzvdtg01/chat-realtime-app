@@ -24,5 +24,4 @@ public class LoginRequests {
         this.email = email;
         this.userpassword = userpassword;
     }
-
 }
