@@ -4,8 +4,8 @@ import LoginPage from "./pages/LoginPage";
 function App() {
   return (
     <Routes>
-      <Route path="/" element={<ChatDashBoard />} />
-      <Route path="/login" element={< LoginPage />} />
+      <Route path="/chat" element={<ChatDashBoard />} />
+      <Route path="/" element={< LoginPage />} />
     </Routes>
   );
 }
