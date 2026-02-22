@@ -3,15 +3,22 @@ import { MDBContainer, MDBCol, MDBRow, MDBBtn, MDBIcon, MDBInput, MDBCheckbox } 
 import { useState, useContext } from "react";
 import { RegisterContext } from "../../services/RegisterService/RegisterContext";
 import { Button } from '../../component/Button';
+import { useNavigate } from 'react-router-dom';
 export const LoginForm = () => {
     const context = useContext(RegisterContext);
-
+    const navigate = useNavigate();
     const [password, setPassowrd] = useState("");
     const [email, setEmail] = useState("");
+    console.log(context.loginData);
     const handleSubmit = (e) => {
         e.preventDefault();
         context.handleLogin(email, password);
+        if (!context.loginData) {
+            alert("Dang nhap thanh cong!")
+            navigate('/chat');
+        }
     }
+
     return (
         <MDBCol col='4' md='6'>
             <form action="submit" onSubmit={handleSubmit}>
