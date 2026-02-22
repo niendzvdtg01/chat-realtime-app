@@ -1,7 +1,7 @@
 import '../styles/login/login.scss'
 import { MDBContainer, MDBCol, MDBRow, MDBBtn, MDBIcon, MDBInput, MDBCheckbox } from 'mdb-react-ui-kit';
 import logo from '../assets/logo.png'
-import { RegisterForm } from '../components/RegisterForm';
+import { RegisterForm } from '../features/LoginPage/RegisterForm';
 import { useState } from 'react';
 import { RegisterProvider } from '../services/RegisterService/handleRgisterService';
 

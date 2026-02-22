@@ -1,8 +1,8 @@
-import '../styles/dashboard/navrbar.scss'
-import userImg from '../assets/dashboard/user-regular-full.svg'
-import userMessage from '../assets/dashboard/message-regular-full.svg'
-import userDirectory from '../assets/dashboard/address-book-solid-full.svg'
-import setting from '../assets/dashboard/gear-solid-full.svg'
+import '../../styles/dashboard/navrbar.scss'
+import userImg from '../../assets/dashboard/user-regular-full.svg'
+import userMessage from '../../assets/dashboard/message-regular-full.svg'
+import userDirectory from '../../assets/dashboard/address-book-solid-full.svg'
+import setting from '../../assets/dashboard/gear-solid-full.svg'
 
 const icons = [
     {

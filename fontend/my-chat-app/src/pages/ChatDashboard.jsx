@@ -1,7 +1,7 @@
-import { ChatMessage } from "../components/ChatMessage";
-import { ChatInfo } from "../components/ChatInfo";
-import { UserList } from "../components/UserList";
-import { Verticalbar } from "../components/Vertcalbar";
+import { ChatMessage } from "../features/ChatDashboard/ChatMessage";
+import { ChatInfo } from "../features/ChatDashboard/ChatInfo";
+import { UserList } from "../features/ChatDashboard/UserList";
+import { Verticalbar } from "../features/ChatDashboard/Vertcalbar";
 
 export default function ChatDashBoard() {
     return (

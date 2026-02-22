@@ -1,5 +1,5 @@
-import '../styles/dashboard/chatinfo.scss'
-import userHeadr from '../assets/dashboard/UsserHeader.png'
+import '../../styles/dashboard/chatinfo.scss'
+import userHeadr from '../../assets/dashboard/UsserHeader.png'
 export const ChatInfo = () => {
     return (
         <div>
