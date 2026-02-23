@@ -27,12 +27,21 @@ export const RegisterProvider = ({ children }) => {
             setLoading(true);
             const res = await login(data);
             setLoginData(res.data);
+            return {
+                success: true,
+                data: res.data
+            };
+
         } catch (e) {
             console.error("Loi: ", e);
+            return {
+                success: false,
+                error: e
+            };
         } finally {
             setLoading(false);
         }
-    }, [])
+    }, [login])
     return (
         <RegisterContext.Provider value={{ handleRegister, handleLogin, register, loading, loginData }}>
             {children}

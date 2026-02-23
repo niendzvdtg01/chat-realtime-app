@@ -14,6 +14,7 @@ import com.example.chatapp.services.UserServices;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController
 @RequestMapping(path = "/user")
@@ -39,5 +40,10 @@ public class UsersController {
     @GetMapping(path = "/getAllUser")
     public List<Users> getAllUsers() {
         return usersRespository.findAll();
+    }
+
+    @GetMapping(path = "/find_user")
+    public List<Users> findUsername(@RequestParam(required = false) String keyword) {
+        return usersRespository.findByFirstName(keyword);
     }
 }

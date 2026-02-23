@@ -4,7 +4,6 @@ import logo from '../assets/logo.png'
 import { RegisterForm } from '../features/LoginPage/RegisterForm';
 import { useContext, useState } from 'react';
 import { RegisterProvider } from '../services/RegisterService/handleRgisterService';
-import { RegisterContext } from '../services/RegisterService/RegisterContext';
 import { LoginForm } from '../features/LoginPage/LoginForm';
 
 function LoginPage() {

@@ -10,13 +10,15 @@ export const LoginForm = () => {
     const [password, setPassowrd] = useState("");
     const [email, setEmail] = useState("");
     console.log(context.loginData);
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        context.handleLogin(email, password);
-        if (!context.loginData) {
-            alert("Dang nhap thanh cong!")
-            navigate('/chat');
+        const result = await context.handleLogin(email, password);
+        if (!result.success) {
+            alert("Sai mat khau");
+            return;
         }
+        alert("Dang nhap thanh cong!!!");
+        navigate("/chat")
     }
 
     return (
