@@ -2,13 +2,19 @@ import '../../styles/dashboard/userlist.scss'
 import addUser from '../../assets/dashboard/user-plus-solid-full.svg'
 import groupUser from '../../assets/dashboard/users-solid-full.svg'
 import { UserCard } from './UsersCard'
+import { useContext, useEffect, useState } from 'react'
+import { UserContext } from '../../services/UserService/UserContext'
 export const UserList = () => {
-    const users = [
-        { name: "John", email: "a@gmail.com" },
-        { name: "John", email: "a@gmail.com" },
-        { name: "John", email: "a@gmail.com" },
-        { name: "John", email: "a@gmail.com" }
-    ]
+    const context = useContext(UserContext);
+    const [query, setQuery] = useState("")
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            if (query) {
+                context.handleSearchUser(query);
+            }
+        }, 500)
+        return () => clearTimeout(timer)
+    }, [query])
     return (
         <div className='user-list-layout'>
             <div className='contact-search d-flex border'>
@@ -25,11 +31,11 @@ export const UserList = () => {
                 </div>
             </div>
             <div className='user-list border'>
-                <ul className="list-group list-group-light" >
+                {/* <ul className="list-group list-group-light" >
                     {users.map((u, index) => (
                         <UserCard name={u.name} email={u.email} />
                     ))}
-                </ul>
+                </ul> */}
             </div>
         </div>
     )
