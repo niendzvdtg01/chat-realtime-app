@@ -15,11 +15,12 @@ export const UserList = () => {
         }, 500)
         return () => clearTimeout(timer)
     }, [query])
+    console.log(context.user)
     return (
         <div className='user-list-layout'>
             <div className='contact-search d-flex border'>
                 <div>
-                    <input type="text" placeholder="Search..." />
+                    <input type="text" placeholder="Search..." onChange={(e) => { setQuery(e.target.value) }} />
                 </div>
                 <div className='add-user d-flex'>
                     <button className="icon-btn">

@@ -18,7 +18,7 @@ export const UserProvider = ({ children }) => {
     }, [])
     useEffect(
         () => {
-            handleSearachUser("");
+            handleSearchUser("");
         }
         , [handleSearchUser])
     return (
