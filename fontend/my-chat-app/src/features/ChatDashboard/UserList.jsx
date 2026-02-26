@@ -16,6 +16,7 @@ export const UserList = () => {
         return () => clearTimeout(timer)
     }, [query])
     console.log(context.user)
+    const user = context.user;
     return (
         <div className='user-list-layout'>
             <div className='contact-search d-flex border'>
@@ -32,11 +33,11 @@ export const UserList = () => {
                 </div>
             </div>
             <div className='user-list border'>
-                {/* <ul className="list-group list-group-light" >
-                    {users.map((u, index) => (
-                        <UserCard name={u.name} email={u.email} />
+                <ul className="list-group list-group-light" >
+                    {user.map((u, index) => (
+                        <UserCard name={u.firstName} email={u.email} />
                     ))}
-                </ul> */}
+                </ul>
             </div>
         </div>
     )
