@@ -1,6 +1,6 @@
 package com.example.chatapp.entity;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import com.example.chatapp.EnumType.ConversationType;
 
@@ -29,17 +29,17 @@ public class Conversations {
     private Users createdBy;
     @ManyToOne
     @JoinColumn(name = "created_at")
-    private Date create_at;
+    private LocalDateTime createAt;
 
     public Conversations() {
 
     }
 
-    public Conversations(Integer conversationId, ConversationType type, Users createdBy, Date create_at) {
+    public Conversations(Integer conversationId, ConversationType type, Users createdBy, LocalDateTime create_at) {
         this.conversationId = conversationId;
         this.type = type;
         this.createdBy = createdBy;
-        this.create_at = create_at;
+        this.createAt = create_at;
     }
 
     public Integer getConversationId() {
@@ -66,11 +66,11 @@ public class Conversations {
         this.createdBy = createdBy;
     }
 
-    public Date getCreate_at() {
-        return this.create_at;
+    public LocalDateTime getCreateAt() {
+        return this.createAt;
     }
 
-    public void setCreate_at(Date create_at) {
-        this.create_at = create_at;
+    public void setCreateAt(LocalDateTime create_at) {
+        this.createAt = create_at;
     }
 }

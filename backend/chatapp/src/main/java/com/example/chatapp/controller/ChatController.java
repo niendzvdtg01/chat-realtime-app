@@ -1,6 +1,7 @@
 package com.example.chatapp.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
@@ -15,8 +16,12 @@ public class ChatController {
 
     @MessageMapping("/sendMessage")
     @SendTo("/topic/messages")
-    public MessageDocument sendMessage(MessageDocument message) {
-        System.out.println("Controller received message: " + message.getContent());
-        return chatMessageServices.saveMessage(message);
+    public ResponseEntity<?> sendMessage(MessageDocument message) {
+        try {
+            chatMessageServices.saveMessage(message);
+            return ResponseEntity.ok("Successfully!");
+        } catch (Exception ex) {
+            return ResponseEntity.status(500).body("Fail");
+        }
     }
 }

@@ -10,6 +10,7 @@ import org.springframework.data.annotation.Id;
 public class MessageDocument {
     @Id
     private String id;
+    private Integer conversationId;
     private String sender;
     private String content;
     private LocalDateTime timestamp;
@@ -20,6 +21,14 @@ public class MessageDocument {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public Integer getConversationId() {
+        return this.conversationId;
+    }
+
+    public void setConversationId(Integer conversationId) {
+        this.conversationId = conversationId;
     }
 
     public String getSender() {
