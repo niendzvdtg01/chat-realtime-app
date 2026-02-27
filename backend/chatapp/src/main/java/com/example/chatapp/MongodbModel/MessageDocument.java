@@ -10,7 +10,6 @@ import org.springframework.data.annotation.Id;
 public class MessageDocument {
     @Id
     private String id;
-
     private String sender;
     private String content;
     private LocalDateTime timestamp;
