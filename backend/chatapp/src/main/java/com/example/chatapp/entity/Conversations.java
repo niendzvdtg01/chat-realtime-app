@@ -25,10 +25,10 @@ public class Conversations {
     @Column(name = "type")
     @Enumerated(EnumType.STRING)
     private ConversationType type;
-    @Column(name = "created_by", nullable = false)
-    private Users createdBy;
     @ManyToOne
-    @JoinColumn(name = "created_at")
+    @JoinColumn(name = "created_by", nullable = false)
+    private Users createdBy;
+    @Column(name = "created_at")
     private LocalDateTime createAt;
 
     public Conversations() {
