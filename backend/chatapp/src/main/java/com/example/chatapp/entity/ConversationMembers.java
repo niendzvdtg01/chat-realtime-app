@@ -9,6 +9,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 
 @Entity
@@ -19,13 +20,18 @@ public class ConversationMembers {
     @Column(name = "id", nullable = false)
     private Integer id;
     @ManyToOne
-    @JoinColumn(name = "conversation_id", nullable = false)
+    @JoinColumn(name = "conversation_id", nullable = false, unique = true)
     private Conversations conversationsId;
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "user_id", nullable = false, unique = true)
     private Users userId;
     @Column(name = "join_at")
     private LocalDateTime joinAt;
+
+    @PrePersist
+    protected void onJoin() {
+        this.joinAt = LocalDateTime.now();
+    }
 
     public ConversationMembers() {
 
