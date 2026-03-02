@@ -21,7 +21,7 @@ public class ConversationMembers {
     private Integer id;
     @ManyToOne
     @JoinColumn(name = "conversation_id", nullable = false, unique = true)
-    private Conversations conversationsId;
+    private Conversations conversationId;
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false, unique = true)
     private Users userId;
@@ -37,9 +37,9 @@ public class ConversationMembers {
 
     }
 
-    public ConversationMembers(Integer id, Conversations conversationsId, Users userId, LocalDateTime joinAt) {
+    public ConversationMembers(Integer id, Conversations conversationId, Users userId, LocalDateTime joinAt) {
         this.id = id;
-        this.conversationsId = conversationsId;
+        this.conversationId = conversationId;
         this.userId = userId;
         this.joinAt = joinAt;
     }
@@ -52,12 +52,12 @@ public class ConversationMembers {
         this.id = id;
     }
 
-    public Conversations getConversationsId() {
-        return this.conversationsId;
+    public Conversations getConversationId() {
+        return this.conversationId;
     }
 
-    public void setConversationsId(Conversations conversationsId) {
-        this.conversationsId = conversationsId;
+    public void setConversationsId(Conversations conversationId) {
+        this.conversationId = conversationId;
     }
 
     public Users getUserId() {

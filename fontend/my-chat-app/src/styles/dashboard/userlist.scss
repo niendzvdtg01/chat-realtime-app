@@ -50,3 +50,7 @@ $searchColor: #ebecf0;
     max-height: 100vh;
     overflow-y: auto;
 }
+
+.user-card:hover {
+    background-color: rgb(0, 0, 0, 0.2);
+}
