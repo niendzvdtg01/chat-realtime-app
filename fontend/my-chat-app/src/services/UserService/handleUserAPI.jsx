@@ -2,10 +2,12 @@ import { useCallback, useEffect, useState } from "react"
 import { findUser } from "./SearchUser.api";
 import { UserContext } from "./UserContext";
 import { createPrivateConversation } from "./PrivateConversation.api";
+import { getUserInfo } from "./getUserInformation";
 
 export const UserProvider = ({ children }) => {
     const [loading, setLoading] = useState(false);
     const [user, setUser] = useState([]);
+    const [userInfo, setUserInfo] = useState(null);
     const handleSearchUser = useCallback(async (keyword) => {
         try {
             setLoading(true)
@@ -33,13 +35,22 @@ export const UserProvider = ({ children }) => {
             }
         }
     }, [])
+    const getUserInformation = useCallback(async () => {
+        try {
+            const res = await getUserInfo();
+            setUserInfo(res.data);
+        } catch (e) {
+            console.log("Loi: ", e);
+        }
+    }, [])
     useEffect(
         () => {
             handleSearchUser("");
+            getUserInformation();
         }
-        , [handleSearchUser])
+        , [handleSearchUser, getUserInformation])
     return (
-        <UserContext.Provider value={{ loading, user, handleSearchUser, handleCreatePrivateConversation }}>
+        <UserContext.Provider value={{ loading, user, userInfo, handleSearchUser, handleCreatePrivateConversation, getUserInformation }}>
             {children}
         </UserContext.Provider>
     )

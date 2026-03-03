@@ -1,21 +1,30 @@
 import '../../styles/dashboard/chatmessage.scss'
 import userHeadr from '../../assets/dashboard/UsserHeader.png'
 import send from '../../assets/dashboard/paper-plane-solid-full.svg'
-import { useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { useChat } from '../../hooks/useChat'
 import useInputState from '../../hooks/useInputState'
+import { UserContext } from '../../services/UserService/UserContext'
 export const ChatMessage = () => {
     const { message, sendMessage } = useChat();
-
+    const [name, setName] = useState("");
     const { value, onChange, reset } = useInputState();
 
+    const context = useContext(UserContext);
+    useEffect(() => {
+        context.getUserInformation();
+    }, [])
+    const userInfo = context.userInfo;
+    const userName = userInfo?.firstName
     const handleSend = () => {
         sendMessage({
-            sender: "ReactUser",
+            conversationId: 3,
+            sender: userInfo?.firstName?.toString(),
             content: value
         })
         reset();
     }
+    console.log(userName?.toString())
     return (
         <div className='chat-message'>
             <div className="border-bottom d-flex">
