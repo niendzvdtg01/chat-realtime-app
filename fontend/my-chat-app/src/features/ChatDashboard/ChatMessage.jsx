@@ -18,13 +18,12 @@ export const ChatMessage = () => {
     const userName = userInfo?.firstName
     const handleSend = () => {
         sendMessage({
-            conversationId: 3,
-            sender: userInfo?.firstName?.toString(),
+            conversationId: 1,
+            sender: userName?.toString(),
             content: value
         })
         reset();
     }
-    console.log(userName?.toString())
     return (
         <div className='chat-message'>
             <div className="border-bottom d-flex">

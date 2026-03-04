@@ -2,6 +2,9 @@ package com.example.chatapp.services;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Service;
 
 import com.example.chatapp.EnumType.ConversationType;
@@ -23,13 +26,14 @@ public class ChatMessageServices {
     private final ConversationRespository conversationRespository;
     private final UsersRespository usersRespository;
     private final ConversationMembersRepository conversationMembersRepository;
+    @Autowired
+    private MongoTemplate mongoTemplate;
 
     public ChatMessageServices(
             ChatMessageRespository chatMessageRespository,
             ConversationRespository conversationRespository,
             UsersRespository usersRespository,
             ConversationMembersRepository conversationMembersRepository) {
-
         this.chatMessageRespository = chatMessageRespository;
         this.conversationRespository = conversationRespository;
         this.usersRespository = usersRespository;
@@ -37,15 +41,16 @@ public class ChatMessageServices {
     }
 
     @Transactional
-    public void saveMessage(MessageDocument message) {
-
+    public MessageDocument saveMessage(MessageDocument message) {
         message.setTimestamp(LocalDateTime.now());
-
-        chatMessageRespository.save(message);
-        Conversations conversation = conversationRespository
+        System.out.println("Before---");
+        conversationRespository
                 .findById(message.getConversationId())
                 .orElseThrow(() -> new RuntimeException("Conversation not found"));
-        conversationRespository.save(conversation);
+        MessageDocument saved = chatMessageRespository.save(message);
+        System.out.println(message.getContent());
+        System.out.println(saved.getId());
+        return saved;
     }
 
     @Transactional

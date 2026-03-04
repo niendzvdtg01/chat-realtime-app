@@ -21,13 +21,18 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class ChatController {
     @Autowired
     private ChatMessageServices chatMessageServices;
+    @Autowired
     private ConversationRespository conversationRespository;
 
     @MessageMapping("/sendMessage")
     @SendTo("/topic/messages")
     public MessageDocument sendMessage(MessageDocument message) {
-        chatMessageServices.saveMessage(message);
-        return message;
+        try {
+            return chatMessageServices.saveMessage(message);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
     }
 
     @PostMapping(path = "/create_conversation")
@@ -35,7 +40,6 @@ public class ChatController {
             Authentication authentication) {
         Integer currentId = (Integer) authentication.getPrincipal();
         return chatMessageServices.createPrivateConversations(currentId, request.getReceiverId());
-
     }
 
     @GetMapping(path = "/get_conversation")

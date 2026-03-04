@@ -11,6 +11,6 @@ public class PrivateConversationRequest {
         this.receiverId = receiverId;
     }
 
-    public PrivateConversationRequest() { //
+    public PrivateConversationRequest() {
     }
 }
