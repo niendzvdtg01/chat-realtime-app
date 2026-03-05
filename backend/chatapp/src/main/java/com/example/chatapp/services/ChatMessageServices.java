@@ -4,12 +4,10 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import com.example.chatapp.EnumType.ConversationType;
 import com.example.chatapp.MongodbModel.MessageDocument;
-import com.example.chatapp.dto.PrivateConversationRequest;
 import com.example.chatapp.entity.ConversationMembers;
 import com.example.chatapp.entity.Conversations;
 import com.example.chatapp.entity.Users;
@@ -56,9 +54,9 @@ public class ChatMessageServices {
     public Conversations createPrivateConversations(Integer currentId, Integer receiveId) {
         Integer user1 = Math.min(currentId, receiveId);
         Integer user2 = Math.max(currentId, receiveId);
-        Optional<Conversations> existing = conversationRespository.findPrivateConversation(user1, user2);
-        if (existing.isPresent()) {
-            return existing.get();
+        List<Conversations> existing = conversationRespository.findPrivateConversation(user1, user2);
+        if (!existing.isEmpty()) {
+            return existing.get(0);
         }
 
         Conversations conversations = new Conversations();
