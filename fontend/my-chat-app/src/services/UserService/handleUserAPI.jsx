@@ -8,6 +8,7 @@ export const UserProvider = ({ children }) => {
     const [loading, setLoading] = useState(false);
     const [user, setUser] = useState([]);
     const [userInfo, setUserInfo] = useState(null);
+    const [message, setMessage] = useState([]);
     const handleSearchUser = useCallback(async (keyword) => {
         try {
             setLoading(true)
@@ -23,6 +24,7 @@ export const UserProvider = ({ children }) => {
     const handleCreatePrivateConversation = useCallback(async (receiverId) => {
         try {
             const res = await createPrivateConversation(receiverId);
+            setMessage(res.data);
             return {
                 success: true,
                 data: res.data
@@ -50,7 +52,7 @@ export const UserProvider = ({ children }) => {
         }
         , [handleSearchUser, getUserInformation])
     return (
-        <UserContext.Provider value={{ loading, user, userInfo, handleSearchUser, handleCreatePrivateConversation, getUserInformation }}>
+        <UserContext.Provider value={{ loading, user, userInfo, message, handleSearchUser, handleCreatePrivateConversation, getUserInformation }}>
             {children}
         </UserContext.Provider>
     )

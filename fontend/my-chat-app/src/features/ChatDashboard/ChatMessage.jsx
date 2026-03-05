@@ -8,13 +8,24 @@ import { UserContext } from '../../services/UserService/UserContext'
 export const ChatMessage = () => {
     const { message, sendMessage } = useChat();
     const { value, onChange, reset } = useInputState();
-
+    const [allMessages, setAllMessages] = useState([]);
     const context = useContext(UserContext);
     useEffect(() => {
         context.getUserInformation();
     }, [])
     const userInfo = context.userInfo;
     const userName = userInfo?.firstName
+    useEffect(() => {
+        if (context?.message) {
+            setAllMessages(context.message);
+        }
+    }, [context?.message])
+    useEffect(() => {
+        if (message.length > 0) {
+            const lastest = message[message.length - 1];
+            setAllMessages(prev => [...prev, lastest]);
+        }
+    }, [message])
     const handleSend = () => {
         sendMessage({
             conversationId: 1,
@@ -23,6 +34,8 @@ export const ChatMessage = () => {
         })
         reset();
     }
+    console.log(allMessages);
+    console.log(context?.message);
     return (
         <div className='chat-message'>
             <div className="border-bottom d-flex">
@@ -40,9 +53,9 @@ export const ChatMessage = () => {
                     </div>
                 </div>
                 <div className='my-chat'>
-                    {message.map((msg, i) => (
-                        <div>
-                            <p key={i}>
+                    {allMessages.map((msg, i) => (
+                        <div key={i}>
+                            <p >
                                 <b>{msg.sender}:</b> {msg.content}
                             </p>
                         </div>

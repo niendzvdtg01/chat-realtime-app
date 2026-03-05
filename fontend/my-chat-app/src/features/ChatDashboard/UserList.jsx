@@ -17,9 +17,8 @@ export const UserList = () => {
         return () => clearTimeout(timer)
     }, [query])
     const user = context.user;
-    const handleClick = async () => {
-        const res = await context.handleCreatePrivateConversation(userId);
-        console.log(res.data)
+    const handleClick = () => {
+        context.handleCreatePrivateConversation(userId);
     }
     return (
         <div className='user-list-layout'>
