@@ -11,6 +11,7 @@ import com.example.chatapp.MongodbModel.MessageDocument;
 import com.example.chatapp.dto.PrivateConversationRequest;
 import com.example.chatapp.entity.Conversations;
 import com.example.chatapp.jpa.respository.ConversationRespository;
+import com.example.chatapp.mongodb.respository.ChatMessageRespository;
 import com.example.chatapp.services.ChatMessageServices;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -35,15 +36,16 @@ public class ChatController {
         }
     }
 
-    @PostMapping(path = "/create_conversation")
-    public Conversations createPrivateConversation(@RequestBody PrivateConversationRequest request,
+    @PostMapping(path = "/get_messages")
+    public List<MessageDocument> createPrivateConversation(@RequestBody PrivateConversationRequest request,
             Authentication authentication) {
         Integer currentId = (Integer) authentication.getPrincipal();
-        return chatMessageServices.createPrivateConversations(currentId, request.getReceiverId());
+        return chatMessageServices.getMessage(currentId, currentId);
     }
 
     @GetMapping(path = "/get_conversation")
     public List<Conversations> getAllconversation() {
         return conversationRespository.findAll();
     }
+
 }

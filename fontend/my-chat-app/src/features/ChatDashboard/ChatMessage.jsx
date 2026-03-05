@@ -7,7 +7,6 @@ import useInputState from '../../hooks/useInputState'
 import { UserContext } from '../../services/UserService/UserContext'
 export const ChatMessage = () => {
     const { message, sendMessage } = useChat();
-    const [name, setName] = useState("");
     const { value, onChange, reset } = useInputState();
 
     const context = useContext(UserContext);
@@ -36,7 +35,9 @@ export const ChatMessage = () => {
             </div>
             <div className='chat-background'>
                 <div className='chat-text'>
-                    <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Hic deserunt recusandae non nihil quos quam culpa sapiente, atque veniam veritatis neque dolore nostrum necessitatibus molestias, maiores, aperiam voluptatem minima commodi?</p>
+                    <div>
+                        <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Hic deserunt recusandae non nihil quos quam culpa sapiente, atque veniam veritatis neque dolore nostrum necessitatibus molestias, maiores, aperiam voluptatem minima commodi?</p>
+                    </div>
                 </div>
                 <div className='my-chat'>
                     {message.map((msg, i) => (

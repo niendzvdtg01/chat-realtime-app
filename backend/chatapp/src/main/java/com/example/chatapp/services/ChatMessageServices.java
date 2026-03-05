@@ -1,14 +1,15 @@
 package com.example.chatapp.services;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import com.example.chatapp.EnumType.ConversationType;
 import com.example.chatapp.MongodbModel.MessageDocument;
+import com.example.chatapp.dto.PrivateConversationRequest;
 import com.example.chatapp.entity.ConversationMembers;
 import com.example.chatapp.entity.Conversations;
 import com.example.chatapp.entity.Users;
@@ -26,8 +27,6 @@ public class ChatMessageServices {
     private final ConversationRespository conversationRespository;
     private final UsersRespository usersRespository;
     private final ConversationMembersRepository conversationMembersRepository;
-    @Autowired
-    private MongoTemplate mongoTemplate;
 
     public ChatMessageServices(
             ChatMessageRespository chatMessageRespository,
@@ -86,5 +85,11 @@ public class ChatMessageServices {
         conversationMembersRepository.save(conversationMembers1);
         conversationMembersRepository.save(conversationMembers2);
         return saveConversations;
+    }
+
+    @Transactional
+    public List<MessageDocument> getMessage(Integer currentId, Integer receiverId) {
+        Conversations conversations = createPrivateConversations(currentId, receiverId);
+        return chatMessageRespository.findByConversationId(conversations.getConversationId());
     }
 }
