@@ -7,7 +7,6 @@ import { UserContext } from '../../services/UserService/UserContext'
 export const UserList = () => {
     const context = useContext(UserContext);
     const [query, setQuery] = useState("")
-    const [userId, setUserId] = useState(0);
     useEffect(() => {
         const timer = setTimeout(() => {
             if (query) {
@@ -17,9 +16,6 @@ export const UserList = () => {
         return () => clearTimeout(timer)
     }, [query])
     const user = context.user;
-    const handleClick = () => {
-        context.handleCreatePrivateConversation(userId);
-    }
     return (
         <div className='user-list-layout'>
             <div className='contact-search d-flex border'>
@@ -39,8 +35,7 @@ export const UserList = () => {
                 <ul className="list-group list-group-light" >
                     {user.map((u, index) => (
                         <a style={{ textDecoration: "none", cursor: "pointer" }} onClick={() => {
-                            setUserId(user[index].userId);
-                            handleClick();
+                            context.handleCreatePrivateConversation(u.userId);
                         }} key={index}>
                             <UserCard name={u.firstName} email={u.email} />
                         </a>

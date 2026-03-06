@@ -10,9 +10,6 @@ export const ChatMessage = () => {
     const { value, onChange, reset } = useInputState();
     const [allMessages, setAllMessages] = useState([]);
     const context = useContext(UserContext);
-    useEffect(() => {
-        context.getUserInformation();
-    }, [])
     const userInfo = context.userInfo;
     const userName = userInfo?.firstName
     useEffect(() => {
@@ -21,14 +18,18 @@ export const ChatMessage = () => {
         }
     }, [context?.message])
     useEffect(() => {
-        if (message.length > 0) {
+        if (message?.length > 0) {
             const lastest = message[message.length - 1];
             setAllMessages(prev => [...prev, lastest]);
         }
     }, [message])
     const handleSend = () => {
+        if (!value) {
+            console.log("value is empty!");
+            return;
+        }
         sendMessage({
-            conversationId: context?.message?.conversationIda,
+            conversationId: context?.message?.conversationId,
             sender: userName?.toString(),
             content: value
         })

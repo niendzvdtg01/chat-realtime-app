@@ -27,10 +27,8 @@ export const LoginForm = () => {
                 <div className="divider d-flex align-items-center my-4">
                     <h2>Login</h2>
                 </div>
-
                 <MDBInput wrapperClass='mb-4' label='Email address' id='formControlLg' type='email' size="lg" onChange={(e) => { setEmail(e.target.value) }} />
                 <MDBInput wrapperClass='mb-4' label='Password' id='formControlLg' type='password' size="lg" onChange={(e) => { setPassowrd(e.target.value) }} />
-
                 <div className="d-flex justify-content-between mb-4">
                     <MDBCheckbox name='flexCheck' value='' id='flexCheckDefault' label='Remember me' />
                     <a href="#">Forgot password?</a>

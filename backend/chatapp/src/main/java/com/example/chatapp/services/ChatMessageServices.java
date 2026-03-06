@@ -2,7 +2,6 @@ package com.example.chatapp.services;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
@@ -55,6 +54,10 @@ public class ChatMessageServices {
     public Conversations createPrivateConversations(Integer currentId, Integer receiveId) {
         Integer user1 = Math.min(currentId, receiveId);
         Integer user2 = Math.max(currentId, receiveId);
+        if (currentId == null || receiveId == null) {
+            throw new IllegalArgumentException("UserId cannot be null");
+        }
+
         List<Conversations> existing = conversationRespository.findPrivateConversation(user1, user2);
         if (!existing.isEmpty()) {
             System.out.println(existing.get(0).getConversationId());

@@ -48,9 +48,11 @@ export const UserProvider = ({ children }) => {
     useEffect(
         () => {
             handleSearchUser("");
-            getUserInformation();
         }
-        , [handleSearchUser, getUserInformation])
+        , [handleSearchUser])
+    useEffect(() => {
+        getUserInformation();
+    }, [])
     return (
         <UserContext.Provider value={{ loading, user, userInfo, message, handleSearchUser, handleCreatePrivateConversation, getUserInformation }}>
             {children}
