@@ -16,8 +16,8 @@ export const ChatMessage = () => {
     const userInfo = context.userInfo;
     const userName = userInfo?.firstName
     useEffect(() => {
-        if (context?.message) {
-            setAllMessages(context.message);
+        if (context?.message?.messageDocuments) {
+            setAllMessages(context.message?.messageDocuments);
         }
     }, [context?.message])
     useEffect(() => {
@@ -28,13 +28,13 @@ export const ChatMessage = () => {
     }, [message])
     const handleSend = () => {
         sendMessage({
-            conversationId: 1,
+            conversationId: context?.message?.conversationIda,
             sender: userName?.toString(),
             content: value
         })
         reset();
     }
-    console.log(allMessages);
+    // console.log(allMessages);
     console.log(context?.message);
     return (
         <div className='chat-message'>

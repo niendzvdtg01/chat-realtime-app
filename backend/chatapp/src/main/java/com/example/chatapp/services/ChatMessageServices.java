@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.chatapp.EnumType.ConversationType;
 import com.example.chatapp.MongodbModel.MessageDocument;
+import com.example.chatapp.dto.MessageResponse;
 import com.example.chatapp.entity.ConversationMembers;
 import com.example.chatapp.entity.Conversations;
 import com.example.chatapp.entity.Users;
@@ -56,9 +57,9 @@ public class ChatMessageServices {
         Integer user2 = Math.max(currentId, receiveId);
         List<Conversations> existing = conversationRespository.findPrivateConversation(user1, user2);
         if (!existing.isEmpty()) {
+            System.out.println(existing.get(0).getConversationId());
             return existing.get(0);
         }
-
         Conversations conversations = new Conversations();
         Users creator = usersRespository.findById(currentId)
                 .orElseThrow(() -> new RuntimeException("User not found!!"));
@@ -86,8 +87,10 @@ public class ChatMessageServices {
     }
 
     @Transactional
-    public List<MessageDocument> getMessage(Integer currentId, Integer receiverId) {
+    public MessageResponse getMessage(Integer currentId, Integer receiverId) {
         Conversations conversations = createPrivateConversations(currentId, receiverId);
-        return chatMessageRespository.findByConversationId(conversations.getConversationId());
+        List<MessageDocument> messageDocument = chatMessageRespository
+                .findByConversationId(conversations.getConversationId());
+        return new MessageResponse(conversations.getConversationId(), messageDocument);
     }
 }
