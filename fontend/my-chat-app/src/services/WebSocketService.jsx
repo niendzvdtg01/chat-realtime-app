@@ -8,7 +8,7 @@ class WebSocketService {
         this.connected = false;
     }
 
-    connect(onMessage) {
+    connect(conversationId, onMessage) {
 
         const socket = new SockJS("http://localhost:8080/ws");
 
@@ -22,7 +22,7 @@ class WebSocketService {
             console.log("STOMP Connected");
             this.connected = true;
 
-            this.client.subscribe("/topic/messages", (message) => {
+            this.client.subscribe(`/topic/conversation/${conversationId}`, (message) => {
                 onMessage(JSON.parse(message.body));
             });
         };

@@ -3,6 +3,7 @@ package com.example.chatapp.services;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import com.example.chatapp.EnumType.ConversationType;
@@ -52,11 +53,11 @@ public class ChatMessageServices {
 
     @Transactional
     public Conversations createPrivateConversations(Integer currentId, Integer receiveId) {
-        Integer user1 = Math.min(currentId, receiveId);
-        Integer user2 = Math.max(currentId, receiveId);
         if (currentId == null || receiveId == null) {
             throw new IllegalArgumentException("UserId cannot be null");
         }
+        Integer user1 = Math.min(currentId, receiveId);
+        Integer user2 = Math.max(currentId, receiveId);
 
         List<Conversations> existing = conversationRespository.findPrivateConversation(user1, user2);
         if (!existing.isEmpty()) {

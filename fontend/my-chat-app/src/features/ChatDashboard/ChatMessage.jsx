@@ -8,57 +8,70 @@ import { UserContext } from '../../services/UserService/UserContext'
 
 export const ChatMessage = () => {
 
-    const { message, sendMessage } = useChat();
-    const { value, onChange, reset } = useInputState();
-    const [allMessages, setAllMessages] = useState([]);
     const context = useContext(UserContext);
+
+    const conversationId = context?.message?.conversationId;
+
+    const { message, sendMessage } = useChat(conversationId);
+
+    const { value, onChange, reset } = useInputState();
+
+    const [allMessages, setAllMessages] = useState([]);
 
     const userInfo = context.userInfo;
     const userName = userInfo?.firstName;
 
     const messagesEndRef = useRef(null);
 
-    /* Load message lần đầu */
+    /* Load message lần đầu khi đổi conversation */
     useEffect(() => {
+
         if (context?.message?.messageDocuments) {
             setAllMessages(context.message.messageDocuments);
+        } else {
+            setAllMessages([]);
         }
-    }, [context?.message]);
 
-    /* Khi websocket nhận message mới */
+    }, [conversationId]);
+
+    /* Khi websocket nhan message moi */
     useEffect(() => {
-        if (message?.length > 0) {
-            const latest = message[message.length - 1];
-            setAllMessages(prev => [...prev, latest]);
-        }
+
+        if (!message || message.length === 0) return;
+
+        const latest = message[message.length - 1];
+
+        setAllMessages(prev => [...prev, latest]);
+
     }, [message]);
 
-    /* Auto scroll xuống cuối */
+    /* Auto scroll xuong cuoi */
     useEffect(() => {
+
         messagesEndRef.current?.scrollIntoView({
             behavior: "smooth"
         });
+
     }, [allMessages]);
 
     const handleSend = () => {
 
-        if (!value.trim()) {
-            console.log("value is empty!");
+        if (!value.trim() || !conversationId) {
             return;
         }
 
         sendMessage({
-            conversationId: context?.message?.conversationId,
+            conversationId: conversationId,
             sender: userName?.toString(),
             content: value
         });
 
         reset();
+
     }
 
     return (
         <div className='chat-message'>
-
             <div className="border-bottom d-flex">
                 <div className='user-img'>
                     <img src={userHeadr} alt="user-Header" className='rounded-circle' />
@@ -67,30 +80,23 @@ export const ChatMessage = () => {
                     <p>User</p>
                 </div>
             </div>
-
             <div className='chat-background'>
-
-                {allMessages.map((msg, i) => (
-
+                {allMessages.map((msg) => (
                     <div
-                        key={i}
-                        className={msg.sender === userName?.toString()
-                            ? 'my-chat'
-                            : 'chat-text'}
+                        key={msg.id ?? Math.random()}
+                        className={
+                            msg.sender === userName?.toString()
+                                ? 'my-chat'
+                                : 'chat-text'
+                        }
                     >
                         <p>
                             <b>{msg.sender}:</b> {msg.content}
                         </p>
-
                     </div>
-
                 ))}
-
-                {/* anchor để scroll */}
                 <div ref={messagesEndRef}></div>
-
             </div>
-
             <div className='chat-input'>
                 <div className='chat-input-group'>
                     <input
@@ -98,14 +104,17 @@ export const ChatMessage = () => {
                         value={value}
                         onChange={onChange}
                         placeholder="Type message..."
+                        onKeyDown={(e) => {
+                            if (e.key === "Enter") {
+                                handleSend();
+                            }
+                        }}
                     />
-
                     <button onClick={handleSend}>
                         <img src={send} alt="send message" />
                     </button>
                 </div>
             </div>
-
         </div>
     )
 }
