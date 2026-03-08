@@ -2,8 +2,6 @@ package com.example.chatapp.services;
 
 import java.time.LocalDateTime;
 import java.util.List;
-
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import com.example.chatapp.EnumType.ConversationType;
@@ -12,6 +10,7 @@ import com.example.chatapp.dto.MessageResponse;
 import com.example.chatapp.entity.ConversationMembers;
 import com.example.chatapp.entity.Conversations;
 import com.example.chatapp.entity.Users;
+import com.example.chatapp.exception.UserNotFoundException;
 import com.example.chatapp.jpa.respository.ConversationMembersRepository;
 import com.example.chatapp.jpa.respository.ConversationRespository;
 import com.example.chatapp.jpa.respository.UsersRespository;
@@ -66,9 +65,9 @@ public class ChatMessageServices {
         }
         Conversations conversations = new Conversations();
         Users creator = usersRespository.findById(currentId)
-                .orElseThrow(() -> new RuntimeException("User not found!!"));
+                .orElseThrow(() -> new UserNotFoundException("User not found!!!"));
         Users receiver = usersRespository.findById(receiveId)
-                .orElseThrow(() -> new RuntimeException("User not found!!!"));
+                .orElseThrow(() -> new UserNotFoundException("User not found!!!"));
         conversations.setCreatedBy(creator);
         conversations.setType(ConversationType.PRIVATE);
 
