@@ -25,15 +25,15 @@ public class Contact {
     private Users userId;
     @ManyToOne
     @JoinColumn(name = "friend_id")
-    private Users frinedId;
+    private Users friendId;
     @Column(name = "status")
     @Enumerated(EnumType.STRING)
     private StatusType status;
 
-    public Contact(Integer contactId, Users userId, Users frinedId, StatusType status) {
+    public Contact(Integer contactId, Users userId, Users friendId, StatusType status) {
         this.contactId = contactId;
         this.userId = userId;
-        this.frinedId = frinedId;
+        this.friendId = friendId;
         this.status = status;
     }
 
@@ -57,12 +57,12 @@ public class Contact {
         this.userId = userId;
     }
 
-    public Users getFrinedId() {
-        return this.frinedId;
+    public Users getFriendId() {
+        return this.friendId;
     }
 
-    public void setFrinedId(Users frinedId) {
-        this.frinedId = frinedId;
+    public void setFriendId(Users friendId) {
+        this.friendId = friendId;
     }
 
     public StatusType getStatus() {

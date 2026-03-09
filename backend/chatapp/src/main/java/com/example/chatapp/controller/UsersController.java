@@ -45,8 +45,12 @@ public class UsersController {
     }
 
     @GetMapping(path = "/find_user")
-    public List<Users> findUsername(@RequestParam(required = false) String keyword) {
-        return usersRespository.findByFirstName(keyword);
+    public List<Users> findUsername(@RequestParam(required = false) String keyword, Authentication authentication) {
+        Integer currentId = (Integer) authentication.getPrincipal();
+        if (keyword == null || keyword.trim().isEmpty()) {
+            return List.of(); // khong search
+        }
+        return usersRespository.findByUserName(keyword, currentId);
     }
 
     @GetMapping(path = "/get_userinfo")

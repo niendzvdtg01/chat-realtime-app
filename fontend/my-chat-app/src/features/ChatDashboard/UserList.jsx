@@ -10,7 +10,7 @@ export const UserList = (props) => {
     const [query, setQuery] = useState("")
     useEffect(() => {
         const timer = setTimeout(() => {
-            if (query) {
+            if (query.trim()) {
                 context.handleSearchUser(query);
             }
         }, 500)

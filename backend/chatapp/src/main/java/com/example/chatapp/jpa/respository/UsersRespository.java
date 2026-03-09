@@ -4,10 +4,18 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+
 import com.example.chatapp.entity.Users;
 
 public interface UsersRespository extends JpaRepository<Users, Integer> {
     Optional<Users> findByEmail(String email);
 
-    List<Users> findByFirstName(String firstName);
+    @Query("""
+               SELECT u FROM Users u
+                WHERE u.firstName LIKE %:firstName%
+                AND u.userId != :currentId
+            """)
+    List<Users> findByUserName(@Param("firstName") String firstName, @Param("currentId") Integer currentId);
 }

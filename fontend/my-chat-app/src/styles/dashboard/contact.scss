@@ -13,7 +13,7 @@
 .contact {
     width: 25rem;
     height: 40rem;
-    background-color: aliceblue;
+    background-color: #fff;
     border-radius: 20px;
     animation: fadeIn 0.25s ease-in;
 
@@ -43,5 +43,20 @@
     to {
         opacity: 1;
         transform: scale(1);
+    }
+}
+
+.search-input {
+    display: flex;
+    justify-content: center;
+
+    input {
+        margin: 1rem;
+        padding: 0 2rem;
+        border: none;
+        background-color: #ebecf0;
+        border-radius: 20px;
+        width: 500px;
+        height: 50px;
     }
 }

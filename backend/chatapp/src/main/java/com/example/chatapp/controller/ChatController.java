@@ -11,6 +11,7 @@ import com.example.chatapp.MongodbModel.MessageDocument;
 import com.example.chatapp.dto.MessageResponse;
 import com.example.chatapp.dto.PrivateConversationRequest;
 import com.example.chatapp.entity.Conversations;
+import com.example.chatapp.exception.UserNotFoundException;
 import com.example.chatapp.jpa.respository.ConversationRespository;
 import com.example.chatapp.services.ChatMessageServices;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -44,6 +45,9 @@ public class ChatController {
     public MessageResponse createPrivateConversation(@RequestBody PrivateConversationRequest request,
             Authentication authentication) {
         Integer currentId = (Integer) authentication.getPrincipal();
+        if (request.getReceiverId() == currentId) {
+            throw new UserNotFoundException("Trung userId");
+        }
         return chatMessageServices.getMessage(currentId, request.getReceiverId());
     }
 
