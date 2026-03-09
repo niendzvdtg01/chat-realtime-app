@@ -54,5 +54,4 @@ public class UsersController {
         Integer userId = (Integer) authentication.getPrincipal();
         return usersRespository.findById(userId);
     }
-
 }

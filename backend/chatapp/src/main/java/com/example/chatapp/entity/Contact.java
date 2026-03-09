@@ -4,6 +4,8 @@ import com.example.chatapp.EnumType.StatusType;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -25,6 +27,7 @@ public class Contact {
     @JoinColumn(name = "friend_id")
     private Users frinedId;
     @Column(name = "status")
+    @Enumerated(EnumType.STRING)
     private StatusType status;
 
     public Contact(Integer contactId, Users userId, Users frinedId, StatusType status) {
