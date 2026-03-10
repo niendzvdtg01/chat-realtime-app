@@ -2,6 +2,7 @@ import '../../styles/dashboard/contact.scss'
 import { UserContext } from '../../services/UserService/UserContext';
 import { useEffect, useState, useContext } from 'react';
 import { UserCard } from '../ChatDashboard/UsersCard';
+import { UserList } from './UserList';
 export const Contact = (props) => {
     const context = useContext(UserContext);
     const [query, setQuery] = useState("")
@@ -31,7 +32,7 @@ export const Contact = (props) => {
                     <div className='p-3 border' style={{ overflowY: "auto", height: "50%" }}>
                         {user.map((u, i) => (
                             <a style={{ textDecoration: "none", cursor: "pointer" }} key={i} >
-                                <UserCard name={u.firstName} email={u.email} />
+                                <UserList name={u.firstName} email={u.email} />
                             </a>
                         ))}
                     </div>

@@ -3,6 +3,7 @@ import userImg from '../../assets/dashboard/user-regular-full.svg'
 import userMessage from '../../assets/dashboard/message-regular-full.svg'
 import userDirectory from '../../assets/dashboard/address-book-solid-full.svg'
 import setting from '../../assets/dashboard/gear-solid-full.svg'
+import notification from '../../assets/dashboard/bell-regular-full.svg'
 
 const icons = [
     {
@@ -24,6 +25,14 @@ const icons = [
     },
     {
         img: userDirectory,
+        styles: 'mt-3',
+        customStyle: {
+            objectFit: "cover",
+            width: "70%",
+        }
+    },
+    {
+        img: notification,
         styles: 'mt-3',
         customStyle: {
             objectFit: "cover",
