@@ -4,7 +4,6 @@ import groupUser from '../../assets/dashboard/users-solid-full.svg'
 import { UserCard } from './UsersCard'
 import { useContext, useEffect, useState } from 'react'
 import { UserContext } from '../../services/UserService/UserContext'
-import { Contact } from '../Contact/Contact'
 export const UserList = (props) => {
     const context = useContext(UserContext);
     const [query, setQuery] = useState("")
