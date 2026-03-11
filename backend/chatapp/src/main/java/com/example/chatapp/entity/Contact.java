@@ -1,11 +1,7 @@
 package com.example.chatapp.entity;
 
-import com.example.chatapp.EnumType.StatusType;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -26,15 +22,11 @@ public class Contact {
     @ManyToOne
     @JoinColumn(name = "friend_id")
     private Users friendId;
-    @Column(name = "status")
-    @Enumerated(EnumType.STRING)
-    private StatusType status;
 
-    public Contact(Integer contactId, Users userId, Users friendId, StatusType status) {
+    public Contact(Integer contactId, Users userId, Users friendId) {
         this.contactId = contactId;
         this.userId = userId;
         this.friendId = friendId;
-        this.status = status;
     }
 
     public Contact() {
@@ -63,13 +55,5 @@ public class Contact {
 
     public void setFriendId(Users friendId) {
         this.friendId = friendId;
-    }
-
-    public StatusType getStatus() {
-        return this.status;
-    }
-
-    public void setStatus(StatusType status) {
-        this.status = status;
     }
 }

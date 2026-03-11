@@ -1,18 +1,14 @@
 package com.example.chatapp.dto;
 
-import com.example.chatapp.EnumType.StatusType;
-
 public class ContactRequest {
     private Integer contactId;
     private Integer userId;
     private Integer friendId;
-    private StatusType status;
 
-    public ContactRequest(Integer contactId, Integer userId, Integer friendId, StatusType status) {
+    public ContactRequest(Integer contactId, Integer userId, Integer friendId) {
         this.contactId = contactId;
         this.userId = userId;
         this.friendId = friendId;
-        this.status = status;
     }
 
     public Integer getContactId() {
@@ -37,13 +33,5 @@ public class ContactRequest {
 
     public void setFriendId(Integer friendId) {
         this.friendId = friendId;
-    }
-
-    public StatusType getStatus() {
-        return this.status;
-    }
-
-    public void setStatus(StatusType status) {
-        this.status = status;
     }
 }
