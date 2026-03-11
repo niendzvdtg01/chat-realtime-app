@@ -6,9 +6,13 @@ import com.example.chatapp.EnumType.StatusType;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 
@@ -19,11 +23,14 @@ public class FriendRequest {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Integer id;
-    @Column(name = "sender_id")
+    @ManyToOne
+    @JoinColumn(name = "sender_id")
     private Users senderId;
-    @Column(name = "receiver_id")
+    @ManyToOne
+    @JoinColumn(name = "receiver_id")
     private Users receiverId;
     @Column(name = "status")
+    @Enumerated(EnumType.STRING)
     private StatusType status;
     @Column(name = "create_at")
     private LocalDateTime createAt;
