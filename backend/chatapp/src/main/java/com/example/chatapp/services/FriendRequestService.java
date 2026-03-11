@@ -20,9 +20,9 @@ public class FriendRequestService {
         this.usersRespository = usersRespository;
     }
 
-    public FriendRequest createFriendRequest(FriendRequestCreation request) {
+    public FriendRequest createFriendRequest(FriendRequestCreation request, Integer senderId) {
         FriendRequest friendRequest = new FriendRequest();
-        Users sender = usersRespository.findById(request.getSenderId())
+        Users sender = usersRespository.findById(senderId)
                 .orElseThrow(() -> new UserNotFoundException("User not found!!"));
         friendRequest.setSenderId(sender);
         Users receiver = usersRespository.findById(request.getReceiverId())
