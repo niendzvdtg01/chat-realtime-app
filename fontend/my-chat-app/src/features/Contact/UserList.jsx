@@ -16,7 +16,11 @@ export const UserList = (props) => {
                     height: "2rem",
                     border: "none",
                     borderRadius: "20px"
-                }} onClick={() => { setClick(true) }}>
+                }} onClick={() => {
+                    setClick(true)
+                    props.setRequest()
+                }}
+                >
                     {click ? "added" : "add"}
                 </button>
             </li>
