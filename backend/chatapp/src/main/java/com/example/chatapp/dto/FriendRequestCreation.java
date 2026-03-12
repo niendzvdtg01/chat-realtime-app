@@ -1,7 +1,6 @@
 package com.example.chatapp.dto;
 
 import com.example.chatapp.EnumType.StatusType;
-import com.example.chatapp.entity.Users;
 
 public class FriendRequestCreation {
     private Integer id;
