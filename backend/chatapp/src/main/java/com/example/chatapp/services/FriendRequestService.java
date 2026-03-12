@@ -1,5 +1,9 @@
 package com.example.chatapp.services;
 
+import java.util.Optional;
+
+import javax.management.RuntimeErrorException;
+
 import org.springframework.stereotype.Service;
 
 import com.example.chatapp.EnumType.StatusType;
@@ -29,6 +33,28 @@ public class FriendRequestService {
                 .orElseThrow(() -> new UserNotFoundException("User not found!!!"));
         friendRequest.setReceiverId(receiver);
         friendRequest.setStatus(StatusType.PENDING);
+        return friendRequestRepository.save(friendRequest);
+    }
+
+    public FriendRequest setStatusFriendRequest(FriendRequestCreation request, Integer senderId) {
+        Users sender = usersRespository.findById(senderId)
+                .orElseThrow(() -> new UserNotFoundException("User not found!!"));
+        Users receiver = usersRespository.findById(request.getReceiverId())
+                .orElseThrow(() -> new UserNotFoundException("User not found!!!"));
+        FriendRequest friendRequest = friendRequestRepository.findBySenderIdAndReceiverId(sender, receiver);
+        if (friendRequest == null) {
+            throw new UserNotFoundException("No sender request find");
+        }
+        switch (request.getStatus()) {
+            case ACCEPTED:
+                friendRequest.setStatus(StatusType.ACCEPTED);
+                break;
+            case REJECTED:
+                friendRequest.setStatus(StatusType.REJECTED);
+                break;
+            default:
+                throw new RuntimeException("Invalid action");
+        }
         return friendRequestRepository.save(friendRequest);
     }
 }
