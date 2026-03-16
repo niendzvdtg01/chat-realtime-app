@@ -8,5 +8,5 @@ import com.example.chatapp.entity.FriendRequest;
 import com.example.chatapp.entity.Users;
 
 public interface FriendRequestRepository extends JpaRepository<FriendRequest, Integer> {
-    Optional<FriendRequest> findBySenderIdAndReceiverId(Users senderId, Users receiverId);
+    FriendRequest findBySenderIdAndReceiverId(Users senderId, Users receiverId);
 }

@@ -1,0 +1,11 @@
+.notification-background {
+    position: fixed;
+    min-width: 15rem;
+    min-height: 20rem;
+    background-color: rgb(221, 229, 236);
+    margin-left: 6rem;
+    margin-top: 10rem;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    z-index: 999999;
+}

@@ -5,6 +5,7 @@ import userDirectory from '../../assets/dashboard/address-book-solid-full.svg'
 import setting from '../../assets/dashboard/gear-solid-full.svg'
 import notification from '../../assets/dashboard/bell-regular-full.svg'
 import { useState } from 'react'
+import { FriendNotification } from '../FriendRequest/RequetNotification'
 
 const icons = [
     {
@@ -37,6 +38,11 @@ const icons = [
 ]
 export const Verticalbar = () => {
     const [active, setActive] = useState(0)
+    const ICON_INDEX = {
+        MESSAGE: 0,
+        DIRECTORY: 1,
+        NOTIFICATION: 2
+    }
     return (
         <div>
             <nav className='navbar-menu d-flex flex-column justify-content-between'>
@@ -74,7 +80,9 @@ export const Verticalbar = () => {
                         style={{ width: "70%" }}
                     />
                 </div>
+                {active === ICON_INDEX.NOTIFICATION && <FriendNotification />}
             </nav>
+
         </div>
     )
 }

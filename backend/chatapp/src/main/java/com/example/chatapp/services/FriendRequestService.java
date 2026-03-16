@@ -1,8 +1,5 @@
 package com.example.chatapp.services;
 
-import java.util.Optional;
-
-import javax.management.RuntimeErrorException;
 
 import org.springframework.stereotype.Service;
 
