@@ -2,7 +2,6 @@ package com.example.chatapp.services;
 
 import org.springframework.stereotype.Service;
 
-import com.example.chatapp.EnumType.ConversationType;
 import com.example.chatapp.dto.ContactRequest;
 import com.example.chatapp.entity.Contact;
 import com.example.chatapp.entity.Users;
