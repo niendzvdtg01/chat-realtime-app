@@ -18,4 +18,11 @@ public interface UsersRespository extends JpaRepository<Users, Integer> {
                 AND u.userId != :currentId
             """)
     List<Users> findByUserName(@Param("firstName") String firstName, @Param("currentId") Integer currentId);
+
+    @Query("""
+               SELECT u FROM Users u
+               JOIN FriendRequest f ON f.senderId = u
+               WHERE f.receiverId.id = :userId
+            """)
+    List<Users> findFriendReuqest(@Param("userId") Integer userId);
 }

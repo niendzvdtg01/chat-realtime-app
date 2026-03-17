@@ -1,4 +1,8 @@
+import { useState } from "react"
+
 export const RequestList = (props) => {
+    const [accept, setAccept] = useState(false)
+    const [reject, setReject] = useState(false)
     return (
         <>
             <ol className="list-group">
@@ -7,20 +11,36 @@ export const RequestList = (props) => {
                         <div className="fw-bold">{props.name}</div>
                         {props.email}
                     </div>
-                    {/* <button style={{
-                        backgroundColor: click ? "red" : "#0d6efd",
+                    <button style={{
+                        backgroundColor: "green",
                         color: "white",
-                        width: "4rem",
+                        width: "2rem",
                         height: "2rem",
                         border: "none",
-                        borderRadius: "20px"
+                        borderRadius: "50%",
+                        margin: "5px"
                     }} onClick={() => {
-                        setClick(true)
+                        setAccept(true)
                         props.setRequest()
                     }}
                     >
-                        {click ? "added" : "add"}
-                    </button> */}
+                        {accept ? "👍" : "✓"}
+                    </button>
+                    <button style={{
+                        backgroundColor: "red",
+                        color: "white",
+                        width: "2rem",
+                        height: "2rem",
+                        border: "none",
+                        borderRadius: "50%",
+                        margin: "5px"
+                    }} onClick={() => {
+                        setReject(true)
+                        props.setRequest()
+                    }}
+                    >
+                        {reject ? "🖕" : "✕"}
+                    </button>
                 </li>
             </ol>
         </>
