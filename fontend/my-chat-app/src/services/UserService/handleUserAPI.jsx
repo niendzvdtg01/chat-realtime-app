@@ -4,12 +4,14 @@ import { UserContext } from "./UserContext";
 import { createPrivateConversation } from "./PrivateConversation.api";
 import { getUserInfo } from "./getUserInformation";
 import { FriendRequest } from "./FriendRequest.api";
+import { FindRequest } from "./FindReuqest.api";
 
 export const UserProvider = ({ children }) => {
     const [loading, setLoading] = useState(false);
     const [user, setUser] = useState([]);
     const [userInfo, setUserInfo] = useState(null);
     const [message, setMessage] = useState([]);
+    const [request, setRequest] = useState([]);
     const handleSearchUser = useCallback(async (keyword) => {
         try {
             setLoading(true)
@@ -62,6 +64,15 @@ export const UserProvider = ({ children }) => {
             }
         }
     }, [])
+
+    const findRequest = useCallback(async () => {
+        try {
+            const res = await FindRequest();
+            setRequest(res.data)
+        } catch (e) {
+            console.error("Loi: ", e)
+        }
+    }, [])
     useEffect(
         () => {
             handleSearchUser("");
@@ -69,6 +80,7 @@ export const UserProvider = ({ children }) => {
         , [handleSearchUser])
     useEffect(() => {
         getUserInformation();
+        findRequest();
     }, [])
     return (
         <UserContext.Provider value={{
@@ -76,6 +88,7 @@ export const UserProvider = ({ children }) => {
             user,
             userInfo,
             message,
+            request,
             handleSearchUser,
             handleCreatePrivateConversation,
             getUserInformation,

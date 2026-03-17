@@ -1,10 +1,10 @@
+import { useContext } from 'react'
 import '../../styles/dashboard/friendrequest.scss'
 import { RequestList } from './ReuqestList'
-export const FriendNotification = (props) => {
-    const User = {
-        name: "Nien",
-        email: "lol@gmail.com"
-    }
+import { UserContext } from '../../services/UserService/UserContext'
+export const FriendNotification = () => {
+    const context = useContext(UserContext);
+    const requests = context.request
     return (
         <>
             <div className="notification-background">
@@ -12,7 +12,9 @@ export const FriendNotification = (props) => {
                     <span style={{ margin: "0 auto" }}>Request List</span>
                 </div>
                 <div className='request'>
-                    <RequestList name={User.name} email={User.email} />
+                    {requests.map((r, i) => (
+                        <RequestList name={r.firstName} email={r.email} key={i} />
+                    ))}
                 </div>
             </div>
         </>
