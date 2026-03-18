@@ -5,6 +5,7 @@ import { createPrivateConversation } from "./PrivateConversation.api";
 import { getUserInfo } from "./getUserInformation";
 import { FriendRequest } from "./FriendRequest.api";
 import { FindRequest } from "./FindReuqest.api";
+import { SetStatus } from "./SetStatus.api";
 
 export const UserProvider = ({ children }) => {
     const [loading, setLoading] = useState(false);
@@ -12,6 +13,7 @@ export const UserProvider = ({ children }) => {
     const [userInfo, setUserInfo] = useState(null);
     const [message, setMessage] = useState([]);
     const [request, setRequest] = useState([]);
+    //Search User
     const handleSearchUser = useCallback(async (keyword) => {
         try {
             setLoading(true)
@@ -23,7 +25,7 @@ export const UserProvider = ({ children }) => {
             setLoading(false)
         }
     }, [])
-
+    // create conversation between user
     const handleCreatePrivateConversation = useCallback(async (receiverId) => {
         try {
             const res = await createPrivateConversation(receiverId);
@@ -40,6 +42,7 @@ export const UserProvider = ({ children }) => {
             }
         }
     }, [])
+    // fetch user information
     const getUserInformation = useCallback(async () => {
         try {
             const res = await getUserInfo();
@@ -48,7 +51,7 @@ export const UserProvider = ({ children }) => {
             console.log("Loi: ", e);
         }
     }, [])
-
+    //send friend request to user
     const sendRequest = useCallback(async (receiverId) => {
         try {
             setLoading(true)
@@ -64,13 +67,29 @@ export const UserProvider = ({ children }) => {
             }
         }
     }, [])
-
+    // get friend request from another user
     const findRequest = useCallback(async () => {
         try {
             const res = await FindRequest();
             setRequest(res.data)
         } catch (e) {
             console.error("Loi: ", e)
+        }
+    }, [])
+    // accept or reject friend request
+    const setStatus = useCallback(async (data) => {
+        try {
+            const res = await SetStatus(data)
+            return {
+                success: true,
+                data: res.data
+            }
+        } catch (e) {
+            console.log("Loi: ", e)
+            return {
+                success: false,
+                error: e
+            }
         }
     }, [])
     useEffect(
@@ -92,7 +111,8 @@ export const UserProvider = ({ children }) => {
             handleSearchUser,
             handleCreatePrivateConversation,
             getUserInformation,
-            sendRequest
+            sendRequest,
+            setStatus
         }}>
             {children}
         </UserContext.Provider>

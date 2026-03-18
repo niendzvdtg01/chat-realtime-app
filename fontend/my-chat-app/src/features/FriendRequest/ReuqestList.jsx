@@ -21,7 +21,7 @@ export const RequestList = (props) => {
                         margin: "5px"
                     }} onClick={() => {
                         setAccept(true)
-                        props.setRequest()
+                        props.setAcceptStatus()
                     }}
                     >
                         {accept ? "👍" : "✓"}
@@ -36,7 +36,7 @@ export const RequestList = (props) => {
                         margin: "5px"
                     }} onClick={() => {
                         setReject(true)
-                        props.setRequest()
+                        props.setRejectStatus()
                     }}
                     >
                         {reject ? "🖕" : "✕"}
