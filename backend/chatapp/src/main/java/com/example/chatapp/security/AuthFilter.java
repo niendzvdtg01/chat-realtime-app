@@ -49,6 +49,7 @@ public class AuthFilter extends OncePerRequestFilter {
         if (token == null) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             response.getWriter().write("Missing requried cookie!!");
+            return;
         }
 
         if (!jwtUtils.validateToken(token)) {

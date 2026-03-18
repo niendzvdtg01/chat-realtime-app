@@ -5,6 +5,7 @@ import { UserContext } from '../../services/UserService/UserContext'
 export const FriendNotification = () => {
     const context = useContext(UserContext);
     const requests = context.request
+    console.log(context.request)
     return (
         <>
             <div className="notification-background">
@@ -13,7 +14,22 @@ export const FriendNotification = () => {
                 </div>
                 <div className='request'>
                     {requests.map((r, i) => (
-                        <RequestList name={r.firstName} email={r.email} key={i} />
+                        <RequestList name={r.firstName}
+                            email={r.email}
+                            key={i}
+                            setAcceptStatus={() => {
+                                context.setStatus({
+                                    senderId: r.userId,
+                                    status: "ACCEPTED"
+                                })
+                            }}
+                            setRejectStatus={() => {
+                                context.setStatus({
+                                    senderId: r.userId,
+                                    status: "REJECTED"
+                                })
+                            }}
+                        />
                     ))}
                 </div>
             </div>

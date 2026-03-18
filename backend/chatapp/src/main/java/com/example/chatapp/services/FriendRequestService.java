@@ -1,6 +1,5 @@
 package com.example.chatapp.services;
 
-
 import org.springframework.stereotype.Service;
 
 import com.example.chatapp.EnumType.StatusType;
@@ -33,10 +32,17 @@ public class FriendRequestService {
         return friendRequestRepository.save(friendRequest);
     }
 
-    public FriendRequest setStatusFriendRequest(FriendRequestCreation request, Integer senderId) {
-        Users sender = usersRespository.findById(senderId)
+    public FriendRequest setStatusFriendRequest(FriendRequestCreation request, Integer receiverId) {
+        if (request.getSenderId() == null) {
+            throw new IllegalArgumentException("senderId is required");
+        }
+        if (request.getStatus() == null) {
+            throw new IllegalArgumentException("status is required");
+        }
+
+        Users receiver = usersRespository.findById(receiverId)
                 .orElseThrow(() -> new UserNotFoundException("User not found!!"));
-        Users receiver = usersRespository.findById(request.getReceiverId())
+        Users sender = usersRespository.findById(request.getSenderId())
                 .orElseThrow(() -> new UserNotFoundException("User not found!!!"));
         FriendRequest friendRequest = friendRequestRepository.findBySenderIdAndReceiverId(sender, receiver);
         if (friendRequest == null) {

@@ -42,11 +42,11 @@ public class FriendRequestController {
         return usersRespository.findFriendReuqest(userId);
     }
 
-    @PostMapping("path")
-    public String postMethodName(@RequestBody String entity) {
-        // TODO: process POST request
-
-        return entity;
+    @PostMapping(path = "/status")
+    public FriendRequest setRequestStatus(@RequestBody FriendRequestCreation requestCreation,
+            Authentication authentication) {
+        Integer receiverId = (Integer) authentication.getPrincipal();
+        return friendRequestService.setStatusFriendRequest(requestCreation, receiverId);
     }
 
 }
