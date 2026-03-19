@@ -2,7 +2,6 @@ package com.example.chatapp.services;
 
 import org.springframework.stereotype.Service;
 
-import com.example.chatapp.dto.ContactRequest;
 import com.example.chatapp.entity.Contact;
 import com.example.chatapp.entity.Users;
 import com.example.chatapp.exception.UserNotFoundException;
@@ -20,14 +19,14 @@ public class ContactServices {
         this.usersRespository = usersRespository;
     }
 
-    public Contact createContact(ContactRequest contactRequest) {
+    public void insertContact(Integer userId, Integer friendId) {
+        Users user = usersRespository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("Users not found!!"));
+        Users friend = usersRespository.findById(friendId)
+                .orElseThrow(() -> new UserNotFoundException("Users not found!!"));
         Contact contact = new Contact();
-        Users currentUser = usersRespository.findById(contactRequest.getUserId())
-                .orElseThrow(() -> new UserNotFoundException("User not found!!"));
-        contact.setUserId(currentUser);
-        Users friendUser = usersRespository.findById(contactRequest.getFriendId())
-                .orElseThrow(() -> new UserNotFoundException("User not found!!"));
-        contact.setFriendId(friendUser);
-        return contactRepository.save(contact);
+        contact.setUserId(user);
+        contact.setFriendId(friend);
+        contactRepository.save(contact);
     }
 }

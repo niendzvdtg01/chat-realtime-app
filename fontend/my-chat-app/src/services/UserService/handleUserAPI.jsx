@@ -6,6 +6,7 @@ import { getUserInfo } from "./getUserInformation";
 import { FriendRequest } from "./FriendRequest.api";
 import { FindRequest } from "./FindReuqest.api";
 import { SetStatus } from "./SetStatus.api";
+import { getAllFriends } from "./FindAllFriends.api";
 
 export const UserProvider = ({ children }) => {
     const [loading, setLoading] = useState(false);
@@ -13,6 +14,7 @@ export const UserProvider = ({ children }) => {
     const [userInfo, setUserInfo] = useState(null);
     const [message, setMessage] = useState([]);
     const [request, setRequest] = useState([]);
+    const [friends, setFriends] = useState([]);
     //Search User
     const handleSearchUser = useCallback(async (keyword) => {
         try {
@@ -80,6 +82,7 @@ export const UserProvider = ({ children }) => {
     const setStatus = useCallback(async (data) => {
         try {
             const res = await SetStatus(data)
+            setRequest(prev => prev.filter(r => r.userId !== data.senderId))
             return {
                 success: true,
                 data: res.data
@@ -92,6 +95,16 @@ export const UserProvider = ({ children }) => {
             }
         }
     }, [])
+    //get friend information
+    const getFriends = useCallback(async () => {
+        try {
+            const res = await getAllFriends();
+            setFriends(res.data)
+        } catch (e) {
+            console.error("Loi: ", e)
+        }
+    }, [])
+    //
     useEffect(
         () => {
             handleSearchUser("");
@@ -100,6 +113,7 @@ export const UserProvider = ({ children }) => {
     useEffect(() => {
         getUserInformation();
         findRequest();
+        getFriends();
     }, [])
     return (
         <UserContext.Provider value={{
@@ -108,11 +122,13 @@ export const UserProvider = ({ children }) => {
             userInfo,
             message,
             request,
+            friends,
             handleSearchUser,
             handleCreatePrivateConversation,
             getUserInformation,
             sendRequest,
-            setStatus
+            setStatus,
+            getFriends
         }}>
             {children}
         </UserContext.Provider>
