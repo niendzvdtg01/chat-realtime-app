@@ -1,8 +1,6 @@
 import { useState } from "react"
 
 export const RequestList = (props) => {
-    const [accept, setAccept] = useState(false)
-    const [reject, setReject] = useState(false)
     return (
         <>
             <ol className="list-group">
@@ -20,11 +18,10 @@ export const RequestList = (props) => {
                         borderRadius: "50%",
                         margin: "5px"
                     }} onClick={() => {
-                        setAccept(true)
                         props.setAcceptStatus()
                     }}
                     >
-                        {accept ? "👍" : "✓"}
+                        ✓
                     </button>
                     <button style={{
                         backgroundColor: "red",
@@ -35,11 +32,10 @@ export const RequestList = (props) => {
                         borderRadius: "50%",
                         margin: "5px"
                     }} onClick={() => {
-                        setReject(true)
                         props.setRejectStatus()
                     }}
                     >
-                        {reject ? "🖕" : "✕"}
+                        ✕
                     </button>
                 </li>
             </ol>

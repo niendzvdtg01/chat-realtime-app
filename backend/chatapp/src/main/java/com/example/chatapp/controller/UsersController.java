@@ -58,4 +58,11 @@ public class UsersController {
         Integer userId = (Integer) authentication.getPrincipal();
         return usersRespository.findById(userId);
     }
+
+    @GetMapping(path = "/find_all_friends")
+    public List<Users> getAllFriends(Authentication authentication) {
+        Integer userId = (Integer) authentication.getPrincipal();
+        return usersRespository.findAllFriends(userId);
+    }
+
 }

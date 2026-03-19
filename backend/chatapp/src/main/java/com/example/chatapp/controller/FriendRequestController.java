@@ -39,7 +39,7 @@ public class FriendRequestController {
     @GetMapping(path = "/find_request")
     public List<Users> getRequest(Authentication authentication) {
         Integer userId = (Integer) authentication.getPrincipal();
-        return usersRespository.findFriendReuqest(userId);
+        return usersRespository.findFriendRequest(userId);
     }
 
     @PostMapping(path = "/status")
@@ -48,5 +48,4 @@ public class FriendRequestController {
         Integer receiverId = (Integer) authentication.getPrincipal();
         return friendRequestService.setStatusFriendRequest(requestCreation, receiverId);
     }
-
 }

@@ -6,16 +6,7 @@ import { useContext, useEffect, useState } from 'react'
 import { UserContext } from '../../services/UserService/UserContext'
 export const UserList = (props) => {
     const context = useContext(UserContext);
-    const [query, setQuery] = useState("")
-    useEffect(() => {
-        const timer = setTimeout(() => {
-            if (query.trim()) {
-                context.handleSearchUser(query);
-            }
-        }, 500)
-        return () => clearTimeout(timer)
-    }, [query])
-    const user = context.user;
+    const user = context.friends;
     return (
         <div>
             <div className='user-list-layout'>
