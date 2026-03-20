@@ -2,37 +2,59 @@ import '../../styles/dashboard/userlist.scss'
 import addUser from '../../assets/dashboard/user-plus-solid-full.svg'
 import groupUser from '../../assets/dashboard/users-solid-full.svg'
 import { UserCard } from './UsersCard'
-import { useContext, useEffect, useState } from 'react'
+import { useContext, useMemo, useState } from 'react'
 import { UserContext } from '../../services/UserService/UserContext'
 export const UserList = (props) => {
     const context = useContext(UserContext);
-    const user = context.friends;
+    const user = context.friends ?? [];
+    const [query, setQuery] = useState('');
+
+    const filteredUsers = useMemo(() => {
+        const q = query.trim().toLowerCase();
+        if (!q) return user;
+        return user.filter((u) => {
+            const name = (u.firstName ?? '').toLowerCase();
+            const email = (u.email ?? '').toLowerCase();
+            return name.includes(q) || email.includes(q);
+        });
+    }, [query, user]);
     return (
-        <div>
-            <div className='user-list-layout'>
-                <div className='contact-search d-flex border'>
-                    <div>
-                        <input type="text" placeholder="Search..." onChange={(e) => { setQuery(e.target.value) }} />
-                    </div>
-                    <div className='add-user d-flex'>
-                        <button className="icon-btn" onClick={() => { props.setTrigger(true) }}>
-                            <img src={addUser} alt="Add user" />
-                        </button>
-                        <button className="icon-btn">
-                            <img src={groupUser} alt="Create group" />
-                        </button>
-                    </div>
+        <div className='user-list-layout'>
+            <div className='contact-search d-flex'>
+                <div className="flex-grow-1">
+                    <input
+                        type="text"
+                        value={query}
+                        placeholder="Search friends..."
+                        onChange={(e) => { setQuery(e.target.value) }}
+                    />
                 </div>
-                <div className='user-list border'>
-                    <ul className="list-group list-group-light" >
-                        {user.map((u, index) => (
-                            <a style={{ textDecoration: "none", cursor: "pointer" }} onClick={() => {
+                <div className='add-user d-flex'>
+                    <button className="icon-btn" onClick={() => { props.setTrigger(true) }} aria-label="Add friend">
+                        <img src={addUser} alt="" />
+                    </button>
+                    <button className="icon-btn" aria-label="Create group">
+                        <img src={groupUser} alt="" />
+                    </button>
+                </div>
+            </div>
+            <div className='user-list'>
+                <div className="user-list-inner">
+                    {filteredUsers.map((u) => (
+                        <button
+                            type="button"
+                            className="user-row"
+                            onClick={() => {
                                 context.handleCreatePrivateConversation(u.userId);
-                            }} key={index}>
-                                <UserCard name={u.firstName} email={u.email} />
-                            </a>
-                        ))}
-                    </ul>
+                            }}
+                            key={u.userId ?? `${u.email}-${u.firstName}`}
+                        >
+                            <UserCard name={u.firstName} email={u.email} />
+                        </button>
+                    ))}
+                    {filteredUsers.length === 0 && (
+                        <div className="user-empty text-muted">No matches</div>
+                    )}
                 </div>
             </div>
         </div>

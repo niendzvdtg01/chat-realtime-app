@@ -72,12 +72,13 @@ export const ChatMessage = () => {
 
     return (
         <div className='chat-message'>
-            <div className="border-bottom d-flex">
+            <div className="chat-header d-flex">
                 <div className='user-img'>
                     <img src={userHeadr} alt="user-Header" className='rounded-circle' />
                 </div>
                 <div>
-                    <p>User</p>
+                    <div className="chat-title">Chat</div>
+                    <div className="chat-subtitle text-muted">Select a friend to start messaging</div>
                 </div>
             </div>
             <div className='chat-background'>
@@ -110,7 +111,7 @@ export const ChatMessage = () => {
                             }
                         }}
                     />
-                    <button onClick={handleSend}>
+                    <button onClick={handleSend} aria-label="Send message">
                         <img src={send} alt="send message" />
                     </button>
                 </div>

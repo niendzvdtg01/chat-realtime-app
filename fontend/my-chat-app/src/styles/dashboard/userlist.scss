@@ -1,7 +1,9 @@
 $searchColor: #ebecf0;
 
 .user-list-layout {
-    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
 }
 
 .contact-search {
@@ -12,16 +14,26 @@ $searchColor: #ebecf0;
     overflow: visible;
     padding: 0 16px;
     position: relative;
+    align-items: center;
+    border-bottom: 1px solid rgba(15, 23, 42, 0.08);
 }
 
 .contact-search input {
-    margin: 1rem;
+    margin: 0;
     background-color: $searchColor;
-    border: none;
+    border: 1px solid transparent;
     height: 2rem;
-    width: 10rem;
+    width: 100%;
     border-radius: 16px;
     padding: 0 2rem;
+    outline: none;
+    transition: 0.15s ease;
+}
+
+.contact-search input:focus {
+    border-color: rgba(11, 94, 215, 0.35);
+    box-shadow: 0 0 0 4px rgba(11, 94, 215, 0.12);
+    background-color: #fff;
 }
 
 .add-user {
@@ -42,15 +54,55 @@ $searchColor: #ebecf0;
     border-radius: 6px;
 }
 
-.icon-btn img:hover {
-    background-color: #eaeaea;
+.icon-btn:hover {
+    background-color: rgba(15, 23, 42, 0.06);
 }
 
 .user-list {
-    max-height: 100vh;
+    flex: 1;
     overflow-y: auto;
 }
 
-.user-card:hover {
-    background-color: rgb(0, 0, 0, 0.2);
+.user-list-inner {
+    padding: 6px;
+}
+
+.user-row {
+    width: 100%;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    text-align: left;
+    border-radius: 12px;
+    transition: 0.15s ease;
+}
+
+.user-row:hover {
+    background-color: rgba(15, 23, 42, 0.04);
+}
+
+.user-row:focus-visible {
+    outline: 3px solid rgba(11, 94, 215, 0.3);
+    outline-offset: -3px;
+}
+
+.user-card {
+    padding: 12px 14px;
+    border-radius: 12px;
+}
+
+.user-avatar {
+    width: 34px;
+    height: 34px;
+    border-radius: 999px;
+    display: grid;
+    place-items: center;
+    background: linear-gradient(135deg, rgba(11, 94, 215, 0.18), rgba(99, 102, 241, 0.18));
+    border: 1px solid rgba(11, 94, 215, 0.18);
+    color: rgba(2, 6, 23, 0.85);
+    font-weight: 700;
+}
+
+.user-empty {
+    padding: 14px;
 }
