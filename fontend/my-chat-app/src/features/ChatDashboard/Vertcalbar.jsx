@@ -10,30 +10,15 @@ import { FriendNotification } from '../FriendRequest/RequetNotification'
 const icons = [
     {
         img: userMessage,
-        styles: 'mt-4',
-        customStyle: {
-            objectFit: "cover",
-            width: "70%",
-            cursor: "pointer"
-        }
+        styles: 'mt-4'
     },
     {
         img: userDirectory,
-        styles: 'mt-3',
-        customStyle: {
-            objectFit: "cover",
-            width: "70%",
-            cursor: "pointer"
-        }
+        styles: 'mt-3'
     },
     {
         img: notification,
-        styles: 'mt-3',
-        customStyle: {
-            objectFit: "cover",
-            width: "70%",
-            cursor: "pointer"
-        }
+        styles: 'mt-3'
     }
 ]
 export const Verticalbar = () => {
@@ -48,14 +33,10 @@ export const Verticalbar = () => {
             <nav className='navbar-menu d-flex flex-column justify-content-between'>
                 <div>
                     <div className='d-flex justify-content-center align-items-center'>
-                        <img src={userImg} alt="user picture"
-                            className='rounded-circle mt-3'
-                            style={{
-                                border: "3px solid black",
-                                objectFit: "cover",
-                                width: "70%",
-                                cursor: "pointer"
-                            }}
+                        <img
+                            src={userImg}
+                            alt="User"
+                            className='navbar-avatar rounded-circle mt-3'
                         />
                     </div>
                     <div>
@@ -65,8 +46,10 @@ export const Verticalbar = () => {
                                     setActive(index)
                                 }}>
                                     <div className={active === index ? 'd-flex justify-content-center align-items-center custom-icons-click' : 'd-flex justify-content-center align-items-center custom-icons'}>
-                                        <img src={c.img} alt="user picture"
-                                            style={c.customStyle}
+                                        <img
+                                            src={c.img}
+                                            alt="Menu item"
+                                            className="navbar-icon"
                                         />
                                     </div>
                                 </div>
@@ -76,8 +59,7 @@ export const Verticalbar = () => {
                 </div>
                 <div className='d-flex justify-content-center'>
                     <img src={setting} alt="Setting"
-                        className='mb-3'
-                        style={{ width: "70%" }}
+                        className='navbar-icon mb-5'
                     />
                 </div>
                 {active === ICON_INDEX.NOTIFICATION && <FriendNotification />}
