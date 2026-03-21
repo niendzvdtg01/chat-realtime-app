@@ -34,9 +34,10 @@ public class Conversations {
     private Users createdBy;
     @Column(name = "created_at")
     private LocalDateTime createAt;
-
     @OneToMany(mappedBy = "conversationId", cascade = CascadeType.ALL)
     private List<ConversationMembers> members;
+    @Column(name = "name")
+    private String name;
 
     @PrePersist
     protected void onCreate() {

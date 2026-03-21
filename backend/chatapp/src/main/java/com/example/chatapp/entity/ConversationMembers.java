@@ -2,8 +2,12 @@ package com.example.chatapp.entity;
 
 import java.time.LocalDateTime;
 
+import com.example.chatapp.EnumType.RoleType;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -27,6 +31,9 @@ public class ConversationMembers {
     private Users userId;
     @Column(name = "join_at")
     private LocalDateTime joinAt;
+    @Column(name = "role")
+    @Enumerated(EnumType.STRING)
+    private RoleType role;
 
     @PrePersist
     protected void onJoin() {
