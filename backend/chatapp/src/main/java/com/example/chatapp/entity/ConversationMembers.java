@@ -44,11 +44,13 @@ public class ConversationMembers {
 
     }
 
-    public ConversationMembers(Integer id, Conversations conversationId, Users userId, LocalDateTime joinAt) {
+    public ConversationMembers(Integer id, Conversations conversationId, Users userId, LocalDateTime joinAt,
+            RoleType role) {
         this.id = id;
         this.conversationId = conversationId;
         this.userId = userId;
         this.joinAt = joinAt;
+        this.role = role;
     }
 
     public Integer getId() {
@@ -82,4 +84,13 @@ public class ConversationMembers {
     public void setJoinAt(LocalDateTime joinAt) {
         this.joinAt = joinAt;
     }
+
+    public RoleType getRole() {
+        return this.role;
+    }
+
+    public void setRole(RoleType role) {
+        this.role = role;
+    }
+
 }
