@@ -4,7 +4,10 @@ import groupUser from '../../assets/dashboard/users-solid-full.svg'
 import { UserCard } from './UsersCard'
 import { useContext, useMemo, useState } from 'react'
 import { UserContext } from '../../services/UserService/UserContext'
+import { AddMember } from '../GroupChat/AddMembers'
 export const UserList = (props) => {
+    const [addFiendClick, setAddFriendClick] = useState(false)
+
     const context = useContext(UserContext);
     const user = context.friends ?? [];
     const [query, setQuery] = useState('');
@@ -33,7 +36,7 @@ export const UserList = (props) => {
                     <button className="icon-btn" onClick={() => { props.setTrigger(true) }} aria-label="Add friend">
                         <img src={addUser} alt="" />
                     </button>
-                    <button className="icon-btn" aria-label="Create group">
+                    <button className="icon-btn" aria-label="Create group" onClick={() => { setAddFriendClick(true) }}>
                         <img src={groupUser} alt="" />
                     </button>
                 </div>
@@ -57,6 +60,7 @@ export const UserList = (props) => {
                     )}
                 </div>
             </div>
+            <AddMember trigger={addFiendClick} setTrigger={setAddFriendClick} />
         </div>
     )
 }
