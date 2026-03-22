@@ -48,11 +48,14 @@ public class Conversations {
 
     }
 
-    public Conversations(Integer conversationId, ConversationType type, Users createdBy, LocalDateTime create_at) {
+    public Conversations(Integer conversationId, ConversationType type, Users createdBy, LocalDateTime createAt,
+            List<ConversationMembers> members, String name) {
         this.conversationId = conversationId;
         this.type = type;
         this.createdBy = createdBy;
-        this.createAt = create_at;
+        this.createAt = createAt;
+        this.members = members;
+        this.name = name;
     }
 
     public Integer getConversationId() {
@@ -83,7 +86,24 @@ public class Conversations {
         return this.createAt;
     }
 
-    public void setCreateAt(LocalDateTime create_at) {
-        this.createAt = create_at;
+    public void setCreateAt(LocalDateTime createAt) {
+        this.createAt = createAt;
     }
+
+    public List<ConversationMembers> getMembers() {
+        return this.members;
+    }
+
+    public void setMembers(List<ConversationMembers> members) {
+        this.members = members;
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
 }
