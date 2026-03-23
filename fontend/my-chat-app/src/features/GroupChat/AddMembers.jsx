@@ -1,10 +1,11 @@
+import { useContext } from "react"
 import "../../styles/dashboard/addmember.scss"
 import { FriendsList } from "./FriendsList"
+import { UserContext } from "../../services/UserService/UserContext"
 export const AddMember = (props) => {
-    const user = {
-        name: "Nien",
-        email: "Nguyen"
-    }
+    const context = useContext(UserContext);
+    const friends = context.friends;
+    console.log(friends)
     return props.trigger ? (
         <>
             <div className="addmember-background ">
@@ -19,11 +20,11 @@ export const AddMember = (props) => {
                         <input type="text" placeholder='Type name here...' onChange={(e) => { setQuery(e.target.value) }} />
                     </div>
                     <div className='p-3 border' style={{ overflowY: "auto", height: "50%" }}>
-
-                        <a style={{ textDecoration: "none", cursor: "pointer" }} >
-                            <FriendsList name={user.name} email={user.email} />
-                        </a>
-
+                        {friends.map((u, i) => (
+                            <a style={{ textDecoration: "none", cursor: "pointer" }} key={i}>
+                                <FriendsList name={u.firstName} email={u.email} />
+                            </a>
+                        ))}
                     </div>
                 </div>
             </div>
