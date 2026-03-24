@@ -7,6 +7,7 @@ import { FriendRequest } from "./FriendRequest.api";
 import { FindRequest } from "./FindReuqest.api";
 import { SetStatus } from "./SetStatus.api";
 import { getAllFriends } from "./FindAllFriends.api";
+import { createGroup } from "./CreateGroup.api";
 
 export const UserProvider = ({ children }) => {
     const [loading, setLoading] = useState(false);
@@ -104,6 +105,25 @@ export const UserProvider = ({ children }) => {
             console.error("Loi: ", e)
         }
     }, [])
+    //create group function
+    const createGroups = useCallback(async (data) => {
+        try {
+            setLoading(true)
+            const res = createGroup(data);
+            return {
+                success: true,
+                data: res.data,
+            }
+        } catch (e) {
+            console.log("Loi: ", e)
+            return {
+                success: false,
+                error: e
+            }
+        } finally {
+            setLoading(false);
+        }
+    }, [])
     //
     useEffect(
         () => {
@@ -128,7 +148,8 @@ export const UserProvider = ({ children }) => {
             getUserInformation,
             sendRequest,
             setStatus,
-            getFriends
+            getFriends,
+            createGroups
         }}>
             {children}
         </UserContext.Provider>

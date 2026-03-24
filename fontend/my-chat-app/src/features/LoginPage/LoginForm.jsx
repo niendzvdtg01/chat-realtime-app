@@ -33,7 +33,7 @@ export const LoginForm = () => {
                     <MDBCheckbox name='flexCheck' value='' id='flexCheckDefault' label='Remember me' />
                     <a href="#">Forgot password?</a>
                 </div>
-                <Button />
+                <Button>Login</Button>
             </form>
         </MDBCol>
     );

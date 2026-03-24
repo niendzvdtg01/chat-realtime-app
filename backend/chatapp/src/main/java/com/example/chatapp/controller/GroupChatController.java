@@ -3,10 +3,8 @@ package com.example.chatapp.controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.chatapp.dto.GroupMemberCreation;
+import com.example.chatapp.dto.CreateGroupRequest;
 import com.example.chatapp.services.GroupChatServices;
-
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -21,11 +19,11 @@ public class GroupChatController {
     private GroupChatServices groupChatServices;
 
     @PostMapping(path = "/create_group")
-    public ResponseEntity<?> createGroupChat(@RequestBody List<GroupMemberCreation> request, String name,
+    public ResponseEntity<?> createGroupChat(@RequestBody CreateGroupRequest request,
             Authentication authentication) {
         Integer currentId = (Integer) authentication.getPrincipal();
         try {
-            groupChatServices.createGroupChat(request, currentId, name);
+            groupChatServices.createGroupChat(request.getMembers(), currentId, request.getName());
             return ResponseEntity.ok("Succucessful!!");
         } catch (Exception ex) {
             return ResponseEntity.status(500).body("Loi" + ex);

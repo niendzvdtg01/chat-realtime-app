@@ -1,4 +1,4 @@
-export const Button = () => {
+export const Button = (props) => {
     return (
         <div className="mt-4">
             <button type='submit' style={{
@@ -10,7 +10,9 @@ export const Button = () => {
                 fontWeight: "bold",
                 fontSize: "20px",
                 color: "white"
-            }}>Login</button>
+            }}
+                onClick={() => { props.onClick() }}
+            >{props.children}</button>
         </div>
     )
 }
