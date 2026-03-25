@@ -18,4 +18,12 @@ public interface ConversationRespository extends JpaRepository<Conversations, In
             AND c.type = com.example.chatapp.EnumType.ConversationType.PRIVATE
             """)
     List<Conversations> findPrivateConversation(@Param("user1") Integer user1, @Param("user2") Integer user2);
+
+    @Query("""
+            SELECT DISTINCT c FROM Conversations c
+            JOIN ConversationMembers m ON m.conversationId = c
+            WHERE m.userId.userId = :user
+            AND c.type = com.example.chatapp.EnumType.ConversationType.GROUP
+            """)
+    List<Conversations> findGroupChat(@Param("user") Integer userId);
 }

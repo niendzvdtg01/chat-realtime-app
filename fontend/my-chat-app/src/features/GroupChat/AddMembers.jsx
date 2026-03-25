@@ -3,10 +3,12 @@ import "../../styles/dashboard/addmember.scss"
 import { FriendsList } from "./FriendsList"
 import { UserContext } from "../../services/UserService/UserContext"
 import { Button } from "../../component/Button"
+import { Spinner } from "../../component/Spinner"
 export const AddMember = (props) => {
     const context = useContext(UserContext);
     const [selectedUsers, setSelectedUsers] = useState([]);
     const [goupName, setGroupName] = useState("");
+    const loading = context.loading
 
     const handleToggleUser = (user) => {
         setSelectedUsers(prev => [...prev, user]);
@@ -16,9 +18,21 @@ export const AddMember = (props) => {
     const friends = context.friends;
     // console.log(friends)
 
-    const handleCreateGroup = () => {
-
+    const handleCreateGroup = async () => {
+        const data = {
+            members: selectedUsers,
+            name: goupName
+        }
+        const res = await context.createGroups(data);
+        if (res.success) {
+            alert("Tao nhom thanh cong")
+        } else {
+            alert("That bai!!")
+        }
+        console.log(res.success)
     }
+
+    console.log(loading)
     return props.trigger ? (
         <>
             <div className="addmember-background ">
@@ -40,7 +54,7 @@ export const AddMember = (props) => {
                         ))}
                     </div>
                     <div className="d-flex justify-content-center">
-                        <Button>Create group</Button>
+                        {loading ? <Spinner /> : <Button onClick={handleCreateGroup}>Create group</Button>}
                     </div>
                 </div>
             </div>

@@ -103,6 +103,15 @@ $searchColor: #ebecf0;
     font-weight: 700;
 }
 
+.group-avatar {
+    background: linear-gradient(135deg, rgba(124, 58, 237, 0.16), rgba(236, 72, 153, 0.14));
+    border-color: rgba(124, 58, 237, 0.18);
+}
+
+.group-card .fw-semibold {
+    max-width: 14rem;
+}
+
 .user-empty {
     padding: 14px;
 }

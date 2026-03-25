@@ -8,6 +8,7 @@ import { FindRequest } from "./FindReuqest.api";
 import { SetStatus } from "./SetStatus.api";
 import { getAllFriends } from "./FindAllFriends.api";
 import { createGroup } from "./CreateGroup.api";
+import { getGroup } from "./GetAllGroupChat.api";
 
 export const UserProvider = ({ children }) => {
     const [loading, setLoading] = useState(false);
@@ -16,6 +17,7 @@ export const UserProvider = ({ children }) => {
     const [message, setMessage] = useState([]);
     const [request, setRequest] = useState([]);
     const [friends, setFriends] = useState([]);
+    const [group, setGroup] = useState([]);
     //Search User
     const handleSearchUser = useCallback(async (keyword) => {
         try {
@@ -124,7 +126,15 @@ export const UserProvider = ({ children }) => {
             setLoading(false);
         }
     }, [])
-    //
+    //get all group
+    const getAllGroup = useCallback(async () => {
+        try {
+            const res = await getGroup();
+            setGroup(res.data);
+        } catch (e) {
+            console.error(e);
+        }
+    }, [])
     useEffect(
         () => {
             handleSearchUser("");
@@ -134,6 +144,7 @@ export const UserProvider = ({ children }) => {
         getUserInformation();
         findRequest();
         getFriends();
+        getAllGroup();
     }, [])
     return (
         <UserContext.Provider value={{
@@ -143,6 +154,7 @@ export const UserProvider = ({ children }) => {
             message,
             request,
             friends,
+            group,
             handleSearchUser,
             handleCreatePrivateConversation,
             getUserInformation,
