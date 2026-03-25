@@ -9,14 +9,15 @@ import "../styles/dashboard/layout.scss";
 
 export default function ChatDashBoard() {
     const [trigger, setTrigger] = useState(false);
+    const [key, setKey] = useState(0)
     return (
         <UserProvider>
             <div className="dashboard-shell">
                 <div className="dashboard-nav">
-                    <Verticalbar />
+                    <Verticalbar setKey={setKey} />
                 </div>
                 <div className="dashboard-panel dashboard-users">
-                    <UserList setTrigger={setTrigger} />
+                    <UserList setTrigger={setTrigger} activeTab={key} />
                 </div>
                 <div className="dashboard-panel dashboard-chat">
                     <ChatMessage />

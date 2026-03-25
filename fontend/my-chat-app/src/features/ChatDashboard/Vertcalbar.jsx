@@ -21,8 +21,8 @@ const icons = [
         styles: 'mt-3'
     }
 ]
-export const Verticalbar = () => {
-    const [active, setActive] = useState(0)
+export const Verticalbar = (props) => {
+    const [active, setActive] = useState(0);
     const ICON_INDEX = {
         MESSAGE: 0,
         DIRECTORY: 1,
@@ -44,6 +44,7 @@ export const Verticalbar = () => {
                             <div key={index}>
                                 <div className={c.styles} onClick={() => {
                                     setActive(index)
+                                    props.setKey(index)
                                 }}>
                                     <div className={active === index ? 'd-flex justify-content-center align-items-center custom-icons-click' : 'd-flex justify-content-center align-items-center custom-icons'}>
                                         <img

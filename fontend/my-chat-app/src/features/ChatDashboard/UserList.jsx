@@ -5,12 +5,16 @@ import { UserCard } from './UsersCard'
 import { useContext, useMemo, useState } from 'react'
 import { UserContext } from '../../services/UserService/UserContext'
 import { AddMember } from '../GroupChat/AddMembers'
+import { GroupCard } from './GroupCard'
 export const UserList = (props) => {
     const [addFiendClick, setAddFriendClick] = useState(false)
 
     const context = useContext(UserContext);
     const user = context.friends ?? [];
+    const group = context.group ?? [];
     const [query, setQuery] = useState('');
+    const isMessageTab = props.activeTab === 0;
+    const isGroupTab = props.activeTab === 1;
 
     const filteredUsers = useMemo(() => {
         const q = query.trim().toLowerCase();
@@ -21,6 +25,13 @@ export const UserList = (props) => {
             return name.includes(q) || email.includes(q);
         });
     }, [query, user]);
+
+    const filteredGroups = useMemo(() => {
+        const q = query.trim().toLowerCase();
+        if (!q) return group;
+        return group.filter((g) => (g?.name ?? '').toString().toLowerCase().includes(q));
+    }, [query, group]);
+
     return (
         <div className='user-list-layout'>
             <div className='contact-search d-flex'>
@@ -28,7 +39,7 @@ export const UserList = (props) => {
                     <input
                         type="text"
                         value={query}
-                        placeholder="Search friends..."
+                        placeholder={isGroupTab ? "Search groups..." : "Search friends..."}
                         onChange={(e) => { setQuery(e.target.value) }}
                     />
                 </div>
@@ -43,7 +54,7 @@ export const UserList = (props) => {
             </div>
             <div className='user-list'>
                 <div className="user-list-inner">
-                    {filteredUsers.map((u) => (
+                    {isMessageTab && (filteredUsers.map((u) => (
                         <button
                             type="button"
                             className="user-row"
@@ -54,8 +65,20 @@ export const UserList = (props) => {
                         >
                             <UserCard name={u.firstName} email={u.email} />
                         </button>
-                    ))}
-                    {filteredUsers.length === 0 && (
+                    )))}
+                    {isMessageTab && filteredUsers.length === 0 && (
+                        <div className="user-empty text-muted">No matches</div>
+                    )}
+                    {isGroupTab && (filteredGroups.map((g) => (
+                        <button
+                            type="button"
+                            className="user-row"
+                            key={g.conversationId ?? g.name ?? JSON.stringify(g)}
+                        >
+                            <GroupCard name={g.name} membersCount={g.members?.length} />
+                        </button>
+                    )))}
+                    {isGroupTab && filteredGroups.length === 0 && (
                         <div className="user-empty text-muted">No matches</div>
                     )}
                 </div>

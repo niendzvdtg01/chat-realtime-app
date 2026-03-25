@@ -3,6 +3,7 @@ package com.example.chatapp.entity;
 import java.time.LocalDateTime;
 
 import com.example.chatapp.EnumType.RoleType;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -25,6 +26,7 @@ public class ConversationMembers {
     private Integer id;
     @ManyToOne
     @JoinColumn(name = "conversation_id", nullable = false, unique = true)
+    @JsonIgnore
     private Conversations conversationId;
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false, unique = true)
