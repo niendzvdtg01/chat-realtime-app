@@ -5,7 +5,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.chatapp.dto.CreateGroupRequest;
 import com.example.chatapp.entity.Conversations;
-import com.example.chatapp.jpa.respository.ConversationMembersRepository;
 import com.example.chatapp.jpa.respository.ConversationRespository;
 import com.example.chatapp.services.GroupChatServices;
 
