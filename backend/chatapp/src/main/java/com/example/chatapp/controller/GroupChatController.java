@@ -4,6 +4,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.chatapp.dto.CreateGroupRequest;
+import com.example.chatapp.dto.MessageResponse;
 import com.example.chatapp.entity.Conversations;
 import com.example.chatapp.jpa.respository.ConversationRespository;
 import com.example.chatapp.services.GroupChatServices;
@@ -16,6 +17,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController
 @RequestMapping(path = "/api/group")
@@ -41,6 +43,11 @@ public class GroupChatController {
     public List<Conversations> getAllGroup(Authentication authentication) {
         Integer userId = (Integer) authentication.getPrincipal();
         return conversationRespository.findGroupChat(userId);
+    }
+
+    @GetMapping(path = "/get_messages")
+    public MessageResponse getMethodName(@RequestParam Integer conversationId) {
+        return groupChatServices.getGroupMessage(conversationId);
     }
 
 }
