@@ -1,9 +1,11 @@
 import { useContext, useState } from 'react'
 import '../../styles/login/register.scss'
 import { RegisterContext } from '../../services/RegisterService/RegisterContext'
-import { RegisterProvider } from '../../services/RegisterService/handleRgisterService'
+import { Button } from '../../component/Button'
+import { useToast } from '../../component/Toast/ToastProvider'
 export const RegisterForm = (props) => {
     const context = useContext(RegisterContext);
+    const { showToast, normalizeMessage } = useToast();
 
     const [form, setForm] = useState({
         email: "",
@@ -11,7 +13,6 @@ export const RegisterForm = (props) => {
         firstName: "",
         lastName: ""
     })
-    console.log(context)
     const handleChange = (e) => {
         const { name, value } = e.target
         setForm(prev => ({
@@ -20,9 +21,25 @@ export const RegisterForm = (props) => {
         }))
     }
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        context.handleRegister(form);
+        const result = await context.handleRegister(form);
+        if (!result?.success) {
+            showToast({
+                type: "error",
+                title: "Tạo tài khoản thất bại",
+                message: normalizeMessage(result?.error),
+            });
+            return;
+        }
+        showToast({
+            type: "success",
+            title: "Tạo tài khoản thành công",
+            message: "Bạn có thể đăng nhập ngay bây giờ.",
+            duration: 2500,
+        });
+        props.setTrigger(false);
+        setForm({ email: "", password: "", firstName: "", lastName: "" });
     }
     return (props.trigger) ? (
         <div className="custom-layout">
@@ -77,7 +94,9 @@ export const RegisterForm = (props) => {
                                                 </div>
 
                                                 <div className="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
-                                                    <button type="submit" data-mdb-button-init data-mdb-ripple-init className="btn btn-primary btn-lg">Register</button>
+                                                    <Button type="submit" loading={context.loading} className="w-100">
+                                                        Register
+                                                    </Button>
                                                 </div>
 
                                             </form>
@@ -99,6 +118,7 @@ export const RegisterForm = (props) => {
                                                 border: 'none',
                                                 backgroundColor: "#ccc"
                                             }}
+                                            type="button"
                                             onClick={() => { props.setTrigger(false) }}
                                         >X</button></div>
                                     </div>

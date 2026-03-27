@@ -23,6 +23,8 @@ export const ChatMessage = () => {
 
     const messagesEndRef = useRef(null);
 
+    console.log(conversationId);
+
     /* Load message lần đầu khi đổi conversation */
     useEffect(() => {
 

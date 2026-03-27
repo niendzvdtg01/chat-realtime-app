@@ -9,6 +9,7 @@ import { SetStatus } from "./SetStatus.api";
 import { getAllFriends } from "./FindAllFriends.api";
 import { createGroup } from "./CreateGroup.api";
 import { getGroup } from "./GetAllGroupChat.api";
+import { getGroupMessages } from "./getGroupMessages.api";
 
 export const UserProvider = ({ children }) => {
     const [loading, setLoading] = useState(false);
@@ -135,11 +136,23 @@ export const UserProvider = ({ children }) => {
             console.error(e);
         }
     }, [])
+
+    //get group messages response
+    const getGroupMessage = useCallback(async (userId) => {
+        try {
+            const res = await getGroupMessages(userId);
+            setMessage(res.data)
+        } catch (e) {
+            console.error("Loi: ", e);
+        }
+    }, [])
+    //fetch user duoc search
     useEffect(
         () => {
             handleSearchUser("");
         }
         , [handleSearchUser])
+    //Lay cac thong tin ban dau
     useEffect(() => {
         getUserInformation();
         findRequest();
@@ -161,7 +174,8 @@ export const UserProvider = ({ children }) => {
             sendRequest,
             setStatus,
             getFriends,
-            createGroups
+            createGroups,
+            getGroupMessage
         }}>
             {children}
         </UserContext.Provider>

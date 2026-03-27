@@ -1,8 +1,7 @@
 import '../styles/login/login.scss'
-import { MDBContainer, MDBCol, MDBRow, MDBBtn, MDBIcon, MDBInput, MDBCheckbox } from 'mdb-react-ui-kit';
 import logo from '../assets/logo.png'
 import { RegisterForm } from '../features/LoginPage/RegisterForm';
-import { useContext, useState } from 'react';
+import { useState } from 'react';
 import { RegisterProvider } from '../services/RegisterService/handleRgisterService';
 import { LoginForm } from '../features/LoginPage/LoginForm';
 
@@ -11,49 +10,52 @@ function LoginPage() {
 
     return (
         <RegisterProvider>
-            <div >
-                <MDBContainer fluid className=" h-custom p-0">
-
-                    <div className='d-flex custom-style'>
-                        <div className=" bg-primary">
-                            <div className='d-flex p-4 text-white'>
-                                <div style={{ margin: "0 auto", display: "flex" }}>
-                                    <img src={logo} alt="logo" style={{ width: "5rem" }} />
-                                    <h2 style={{ fontWeight: "bolder" }}>Synchat</h2>
-                                </div>
-                            </div>
-                        </div>
-                        <div className='container mt-5 login-form'>
-
-                            <MDBRow>
-
-                                <MDBCol col='10' md='6'>
-                                    <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.webp" className="img-fluid" alt="Sample image" />
-                                </MDBCol>
-
-                                <LoginForm />
-                                <div className=' text-center mt-4 pt-2'>
-                                    <p className="small fw-bold mt-2 pt-1 mb-2">Don't have an account? <a onClick={() => { setTrigger(true) }} className="link-danger"
-                                        style={{
-                                            textDecoration: "none",
-                                            cursor: "pointer"
-                                        }}
-                                    >Register</a></p>
+            <div className="login-page">
+                <div className="container">
+                    <div className="row justify-content-center">
+                        <div className="col-12 col-lg-10 col-xl-9">
+                            <div className="login-card row g-0">
+                                <div className="col-md-6 login-hero">
+                                    <div className='d-flex justify-content-center'>
+                                        <div className="login-brand">
+                                            <img src={logo} alt="logo" className="login-logo" />
+                                            <div className="login-brand-text">Synchat</div>
+                                        </div>
+                                    </div>
+                                    <div className='d-flex justify-content-center'>
+                                        <div className="login-hero-title">Chat nhanh hơn. Kết nối dễ hơn.</div>
+                                    </div>
+                                    <div className='d-flex justify-content-center m-4'>
+                                        <div className="login-hero-desc">
+                                            Đăng nhập để tiếp tục trò chuyện realtime, tạo nhóm và chia sẻ khoảnh khắc cùng mọi người.
+                                        </div>
+                                    </div>
+                                    <img
+                                        src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.webp"
+                                        className="login-hero-ill"
+                                        alt="Chat illustration"
+                                    />
                                 </div>
 
-                            </MDBRow>
-
-                        </div>
-                        <div className="d-flex flex-column flex-md-row text-center text-md-start justify-content-between py-4 px-4 px-xl-5 bg-primary">
-
-                            <div className="text-white mb-3 mb-md-0">
-                                Copyright © 2020. All rights reserved.
+                                <div className="col-md-6 login-panel">
+                                    <LoginForm />
+                                    <div className="text-center mt-4">
+                                        <div className="small fw-bold mb-0">
+                                            Chưa có tài khoản?{" "}
+                                            <button type="button" className="btn btn-link p-0 login-link" onClick={() => setTrigger(true)}>
+                                                Đăng ký
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-
+                            <div className="login-footer text-center mt-3">
+                                <small>© 2026 Synchat. All rights reserved.</small>
+                            </div>
                         </div>
-
                     </div>
-                </MDBContainer>
+                </div>
+
                 <RegisterForm trigger={trigger} setTrigger={setTrigger} />
             </div>
         </RegisterProvider>
