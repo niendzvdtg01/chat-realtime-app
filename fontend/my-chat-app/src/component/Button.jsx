@@ -1,18 +1,26 @@
-export const Button = (props) => {
+export const Button = ({
+    children,
+    className = "",
+    disabled = false,
+    loading = false,
+    onClick,
+    type = "button",
+    variant = "primary",
+}) => {
+    const isDisabled = disabled || loading;
+
     return (
-        <div className="mt-4">
-            <button type='submit' style={{
-                width: "10rem",
-                height: "3rem",
-                border: "none",
-                backgroundColor: "#0d6efd",
-                borderRadius: "12px",
-                fontWeight: "bold",
-                fontSize: "20px",
-                color: "white"
-            }}
-                onClick={() => { props.onClick() }}
-            >{props.children}</button>
-        </div>
-    )
-}
+        <button
+            type={type}
+            className={`btn btn-${variant} d-inline-flex align-items-center justify-content-center gap-2 ${className}`}
+            style={{ minHeight: "44px", borderRadius: "12px", fontWeight: 700 }}
+            disabled={isDisabled}
+            onClick={onClick}
+        >
+            {loading ? (
+                <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" />
+            ) : null}
+            <span>{children}</span>
+        </button>
+    );
+};

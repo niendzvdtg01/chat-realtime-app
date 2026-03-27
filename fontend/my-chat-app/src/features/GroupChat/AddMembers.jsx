@@ -53,7 +53,7 @@ export const AddMember = (props) => {
                             </a>
                         ))}
                     </div>
-                    <div className="d-flex justify-content-center">
+                    <div className="d-flex justify-content-center mt-5">
                         {loading ? <Spinner /> : <Button onClick={handleCreateGroup}>Create group</Button>}
                     </div>
                 </div>

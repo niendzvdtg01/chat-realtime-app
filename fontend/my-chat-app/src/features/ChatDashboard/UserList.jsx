@@ -74,6 +74,7 @@ export const UserList = (props) => {
                             type="button"
                             className="user-row"
                             key={g.conversationId ?? g.name ?? JSON.stringify(g)}
+                            onClick={() => { context.getGroupMessage(g.conversationId) }}
                         >
                             <GroupCard name={g.name} membersCount={g.members?.length} />
                         </button>

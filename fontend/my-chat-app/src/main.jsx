@@ -5,12 +5,15 @@ import './index.css'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { BrowserRouter } from 'react-router-dom';
 import global from "global";
+import { ToastProvider } from "./component/Toast/ToastProvider.jsx";
 
 window.global = global;
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
+    <ToastProvider>
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    </ToastProvider>
   </StrictMode>,
 )
