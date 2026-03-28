@@ -6,7 +6,7 @@ import { useChat } from '../../hooks/useChat'
 import useInputState from '../../hooks/useInputState'
 import { UserContext } from '../../services/UserService/UserContext'
 
-export const ChatMessage = () => {
+export const ChatMessage = (props) => {
 
     const context = useContext(UserContext);
 
@@ -79,8 +79,8 @@ export const ChatMessage = () => {
                     <img src={userHeadr} alt="user-Header" className='rounded-circle' />
                 </div>
                 <div>
-                    <div className="chat-title">Chat</div>
-                    <div className="chat-subtitle text-muted">Select a friend to start messaging</div>
+                    <div className="chat-title">{props.name?.firstName || props.name?.name || "Chat"}</div>
+                    <div className="chat-subtitle text-muted">Start messaging</div>
                 </div>
             </div>
             <div className='chat-background'>

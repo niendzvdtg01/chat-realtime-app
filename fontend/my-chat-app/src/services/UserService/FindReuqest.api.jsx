@@ -1,7 +1,4 @@
-import axios from "axios"
-const BASE_URL = "http://localhost:8080/api/find_request"
+import { userServiceClient } from "./httpClient";
 export const FindRequest = () => {
-    return axios.get(BASE_URL, {
-        withCredentials: true
-    })
+    return userServiceClient.get("/api/find_request");
 }

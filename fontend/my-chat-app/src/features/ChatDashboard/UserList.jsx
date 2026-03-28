@@ -60,6 +60,7 @@ export const UserList = (props) => {
                             className="user-row"
                             onClick={() => {
                                 context.handleCreatePrivateConversation(u.userId);
+                                props.setUserDetail(u)
                             }}
                             key={u.userId ?? `${u.email}-${u.firstName}`}
                         >
@@ -74,8 +75,10 @@ export const UserList = (props) => {
                             type="button"
                             className="user-row"
                             key={g.conversationId ?? g.name ?? JSON.stringify(g)}
-                            onClick={() => { context.getGroupMessage(g.conversationId) }}
-                        >
+                            onClick={() => {
+                                context.getGroupMessage(g.conversationId)
+                                props.setUserDetail(g)
+                            }}>
                             <GroupCard name={g.name} membersCount={g.members?.length} />
                         </button>
                     )))}

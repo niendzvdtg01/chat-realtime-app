@@ -10,6 +10,7 @@ import "../styles/dashboard/layout.scss";
 export default function ChatDashBoard() {
     const [trigger, setTrigger] = useState(false);
     const [key, setKey] = useState(0)
+    const [userDetail, setUserDetail] = useState("");
     return (
         <UserProvider>
             <div className="dashboard-shell">
@@ -17,13 +18,13 @@ export default function ChatDashBoard() {
                     <Verticalbar setKey={setKey} />
                 </div>
                 <div className="dashboard-panel dashboard-users">
-                    <UserList setTrigger={setTrigger} activeTab={key} />
+                    <UserList setTrigger={setTrigger} activeTab={key} setUserDetail={setUserDetail} />
                 </div>
                 <div className="dashboard-panel dashboard-chat">
-                    <ChatMessage />
+                    <ChatMessage name={userDetail} />
                 </div>
                 <div className="dashboard-panel dashboard-info">
-                    <ChatInfo />
+                    <ChatInfo details={userDetail} />
                 </div>
             </div>
             <Contact trigger={trigger} setTrigger={setTrigger} />

@@ -1,8 +1,4 @@
-import axios from "axios"
-
-const BASE_URL = "http://localhost:8080/api/group/get_group"
+import { userServiceClient } from "./httpClient";
 export const getGroup = () => {
-    return axios.get(BASE_URL, {
-        withCredentials: true
-    })
+    return userServiceClient.get("/api/group/get_group");
 }

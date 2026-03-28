@@ -12,28 +12,50 @@ import { getGroup } from "./GetAllGroupChat.api";
 import { getGroupMessages } from "./getGroupMessages.api";
 
 export const UserProvider = ({ children }) => {
-    const [loading, setLoading] = useState(false);
+    const [loadingCount, setLoadingCount] = useState(0);
+    const [loadingByAction, setLoadingByAction] = useState({});
     const [user, setUser] = useState([]);
     const [userInfo, setUserInfo] = useState(null);
     const [message, setMessage] = useState([]);
     const [request, setRequest] = useState([]);
     const [friends, setFriends] = useState([]);
     const [group, setGroup] = useState([]);
+
+    const beginLoading = useCallback((action) => {
+        setLoadingCount((c) => c + 1);
+        if (!action) return;
+        setLoadingByAction((prev) => ({
+            ...prev,
+            [action]: (prev[action] ?? 0) + 1,
+        }));
+    }, []);
+
+    const endLoading = useCallback((action) => {
+        setLoadingCount((c) => Math.max(0, c - 1));
+        if (!action) return;
+        setLoadingByAction((prev) => {
+            const next = Math.max(0, (prev[action] ?? 0) - 1);
+            return { ...prev, [action]: next };
+        });
+    }, []);
+
+    const loading = loadingCount > 0;
     //Search User
     const handleSearchUser = useCallback(async (keyword) => {
         try {
-            setLoading(true)
+            beginLoading("searchUser");
             const res = await findUser(keyword);
             setUser(res.data);
         } catch (e) {
             console.error('Loi: ', e);
         } finally {
-            setLoading(false)
+            endLoading("searchUser");
         }
-    }, [])
+    }, [beginLoading, endLoading])
     // create conversation between user
     const handleCreatePrivateConversation = useCallback(async (receiverId) => {
         try {
+            beginLoading("privateConversation");
             const res = await createPrivateConversation(receiverId);
             setMessage(res.data);
             return {
@@ -46,21 +68,26 @@ export const UserProvider = ({ children }) => {
                 success: false,
                 error: e
             }
+        } finally {
+            endLoading("privateConversation");
         }
-    }, [])
+    }, [beginLoading, endLoading])
     // fetch user information
     const getUserInformation = useCallback(async () => {
         try {
+            beginLoading("userInfo");
             const res = await getUserInfo();
             setUserInfo(res.data);
         } catch (e) {
             console.log("Loi: ", e);
+        } finally {
+            endLoading("userInfo");
         }
-    }, [])
+    }, [beginLoading, endLoading])
     //send friend request to user
     const sendRequest = useCallback(async (receiverId) => {
         try {
-            setLoading(true)
+            beginLoading("sendRequest");
             const res = await FriendRequest(receiverId)
             return {
                 success: true,
@@ -71,20 +98,26 @@ export const UserProvider = ({ children }) => {
                 success: false,
                 error: e
             }
+        } finally {
+            endLoading("sendRequest");
         }
-    }, [])
+    }, [beginLoading, endLoading])
     // get friend request from another user
     const findRequest = useCallback(async () => {
         try {
+            beginLoading("findRequest");
             const res = await FindRequest();
             setRequest(res.data)
         } catch (e) {
             console.error("Loi: ", e)
+        } finally {
+            endLoading("findRequest");
         }
-    }, [])
+    }, [beginLoading, endLoading])
     // accept or reject friend request
     const setStatus = useCallback(async (data) => {
         try {
+            beginLoading("setStatus");
             const res = await SetStatus(data)
             setRequest(prev => prev.filter(r => r.userId !== data.senderId))
             return {
@@ -97,22 +130,27 @@ export const UserProvider = ({ children }) => {
                 success: false,
                 error: e
             }
+        } finally {
+            endLoading("setStatus");
         }
-    }, [])
+    }, [beginLoading, endLoading])
     //get friend information
     const getFriends = useCallback(async () => {
         try {
+            beginLoading("friends");
             const res = await getAllFriends();
             setFriends(res.data)
         } catch (e) {
             console.error("Loi: ", e)
+        } finally {
+            endLoading("friends");
         }
-    }, [])
+    }, [beginLoading, endLoading])
     //create group function
     const createGroups = useCallback(async (data) => {
         try {
-            setLoading(true)
-            const res = createGroup(data);
+            beginLoading("createGroup");
+            const res = await createGroup(data);
             return {
                 success: true,
                 data: res.data,
@@ -124,28 +162,34 @@ export const UserProvider = ({ children }) => {
                 error: e
             }
         } finally {
-            setLoading(false);
+            endLoading("createGroup");
         }
-    }, [])
+    }, [beginLoading, endLoading])
     //get all group
     const getAllGroup = useCallback(async () => {
         try {
+            beginLoading("groups");
             const res = await getGroup();
             setGroup(res.data);
         } catch (e) {
             console.error(e);
+        } finally {
+            endLoading("groups");
         }
-    }, [])
+    }, [beginLoading, endLoading])
 
     //get group messages response
     const getGroupMessage = useCallback(async (userId) => {
         try {
+            beginLoading("groupMessages");
             const res = await getGroupMessages(userId);
             setMessage(res.data)
         } catch (e) {
             console.error("Loi: ", e);
+        } finally {
+            endLoading("groupMessages");
         }
-    }, [])
+    }, [beginLoading, endLoading])
     //fetch user duoc search
     useEffect(
         () => {
@@ -162,6 +206,7 @@ export const UserProvider = ({ children }) => {
     return (
         <UserContext.Provider value={{
             loading,
+            loadingByAction,
             user,
             userInfo,
             message,
