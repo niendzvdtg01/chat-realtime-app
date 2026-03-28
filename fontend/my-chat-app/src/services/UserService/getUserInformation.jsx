@@ -1,8 +1,4 @@
-import axios from "axios"
-
-const BASE_URL = "http://localhost:8080/user/get_userinfo"
+import { userServiceClient } from "./httpClient";
 export const getUserInfo = () => {
-    return axios.get(BASE_URL, {
-        withCredentials: true
-    })
+    return userServiceClient.get("/user/get_userinfo");
 }

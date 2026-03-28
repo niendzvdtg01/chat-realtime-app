@@ -1,9 +1,5 @@
-import axios from "axios"
-
-const BASE_URL = "http://localhost:8080/user/find_all_friends"
+import { userServiceClient } from "./httpClient";
 
 export const getAllFriends = () => {
-    return axios.get(BASE_URL, {
-        withCredentials: true
-    })
+    return userServiceClient.get("/user/find_all_friends");
 }
