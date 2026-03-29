@@ -35,4 +35,6 @@ public interface UsersRespository extends JpaRepository<Users, Integer> {
                 )
             """, nativeQuery = true)
     List<Users> findAllFriends(@Param("userId") Integer userId);
+
+    
 }
