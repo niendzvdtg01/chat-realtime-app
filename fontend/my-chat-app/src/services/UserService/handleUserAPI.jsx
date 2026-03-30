@@ -10,6 +10,7 @@ import { getAllFriends } from "./FindAllFriends.api";
 import { createGroup } from "./CreateGroup.api";
 import { getGroup } from "./GetAllGroupChat.api";
 import { getGroupMessages } from "./getGroupMessages.api";
+import { updateUser } from "./UpdateUser.api";
 
 export const UserProvider = ({ children }) => {
     const [loadingCount, setLoadingCount] = useState(0);
@@ -84,6 +85,26 @@ export const UserProvider = ({ children }) => {
             endLoading("userInfo");
         }
     }, [beginLoading, endLoading])
+
+    const updateUserInformation = useCallback(async (formData) => {
+        try {
+            beginLoading("updateUser");
+            const res = await updateUser(formData);
+            await getUserInformation();
+            return {
+                success: true,
+                data: res.data,
+            }
+        } catch (e) {
+            console.log("Loi: ", e);
+            return {
+                success: false,
+                error: e
+            }
+        } finally {
+            endLoading("updateUser");
+        }
+    }, [beginLoading, endLoading, getUserInformation])
     //send friend request to user
     const sendRequest = useCallback(async (receiverId) => {
         try {
@@ -216,6 +237,7 @@ export const UserProvider = ({ children }) => {
             handleSearchUser,
             handleCreatePrivateConversation,
             getUserInformation,
+            updateUserInformation,
             sendRequest,
             setStatus,
             getFriends,

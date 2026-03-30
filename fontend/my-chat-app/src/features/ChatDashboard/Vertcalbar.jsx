@@ -4,8 +4,10 @@ import userMessage from '../../assets/dashboard/message-regular-full.svg'
 import userDirectory from '../../assets/dashboard/address-book-solid-full.svg'
 import setting from '../../assets/dashboard/gear-solid-full.svg'
 import notification from '../../assets/dashboard/bell-regular-full.svg'
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import { FriendNotification } from '../FriendRequest/RequetNotification'
+import { UserContext } from '../../services/UserService/UserContext'
+import { UpdateUserForm } from '../UserProfile/UpdateUserForm'
 
 const icons = [
     {
@@ -23,6 +25,8 @@ const icons = [
 ]
 export const Verticalbar = (props) => {
     const [active, setActive] = useState(0);
+    const [openProfile, setOpenProfile] = useState(false);
+    const { userInfo } = useContext(UserContext) ?? {};
     const ICON_INDEX = {
         MESSAGE: 0,
         DIRECTORY: 1,
@@ -37,6 +41,8 @@ export const Verticalbar = (props) => {
                             src={userImg}
                             alt="User"
                             className='navbar-avatar rounded-circle mt-3'
+                            onClick={() => setOpenProfile(true)}
+                            style={{ cursor: 'pointer' }}
                         />
                     </div>
                     <div>
@@ -66,6 +72,7 @@ export const Verticalbar = (props) => {
                 {active === ICON_INDEX.NOTIFICATION && <FriendNotification />}
             </nav>
 
+            <UpdateUserForm trigger={openProfile} setTrigger={setOpenProfile} />
         </div>
     )
 }

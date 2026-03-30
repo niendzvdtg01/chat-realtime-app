@@ -72,11 +72,13 @@ export const ChatMessage = (props) => {
 
     }
 
+    console.log(context.friends)
+
     return (
         <div className='chat-message'>
             <div className="chat-header d-flex">
                 <div className='user-img'>
-                    <img src={userHeadr} alt="user-Header" className='rounded-circle' />
+                    <img src={props.name?.avatarUrl || userHeadr} alt="user-Header" />
                 </div>
                 <div>
                     <div className="chat-title">{props.name?.firstName || props.name?.name || "Chat"}</div>

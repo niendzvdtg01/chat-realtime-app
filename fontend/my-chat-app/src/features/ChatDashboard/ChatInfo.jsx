@@ -9,7 +9,7 @@ export const ChatInfo = (props) => {
             </div>
             <div className='chat-about'>
                 <div className='chat-info-hero'>
-                    <img src={userHeadr} alt="User" className='rounded-circle' />
+                    <img src={details.avatarUrl || userHeadr} alt="User" className='rounded-circle' />
                     <div className="chat-info-name">{details.firstName || details.name || "User/Group"}</div>
                     <div className="chat-info-meta text-muted">Details and actions</div>
                 </div>
