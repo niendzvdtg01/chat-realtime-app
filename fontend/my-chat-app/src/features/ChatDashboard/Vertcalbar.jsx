@@ -8,6 +8,7 @@ import { useContext, useState } from 'react'
 import { FriendNotification } from '../FriendRequest/RequetNotification'
 import { UserContext } from '../../services/UserService/UserContext'
 import { UpdateUserForm } from '../UserProfile/UpdateUserForm'
+import { Setting } from '../Logout/Setting'
 
 const icons = [
     {
@@ -30,7 +31,8 @@ export const Verticalbar = (props) => {
     const ICON_INDEX = {
         MESSAGE: 0,
         DIRECTORY: 1,
-        NOTIFICATION: 2
+        NOTIFICATION: 2,
+        SETTING: 3
     }
     return (
         <div>
@@ -39,7 +41,7 @@ export const Verticalbar = (props) => {
                     <div className='d-flex justify-content-center align-items-center'>
                         <img
                             src={userImg}
-                            alt="User"  
+                            alt="User"
                             className='navbar-avatar rounded-circle mt-3'
                             onClick={() => setOpenProfile(true)}
                             style={{ cursor: 'pointer' }}
@@ -64,15 +66,17 @@ export const Verticalbar = (props) => {
                         ))}
                     </div>
                 </div>
-                <div className='d-flex justify-content-center'>
+                <div className='d-flex justify-content-center' onClick={() => { setActive(ICON_INDEX.SETTING) }}>
                     <img src={setting} alt="Setting"
                         className='navbar-icon mb-5'
                     />
                 </div>
                 {active === ICON_INDEX.NOTIFICATION && <FriendNotification />}
+                {active === ICON_INDEX.SETTING && <Setting />}
             </nav>
 
             <UpdateUserForm trigger={openProfile} setTrigger={setOpenProfile} />
+
         </div>
     )
 }

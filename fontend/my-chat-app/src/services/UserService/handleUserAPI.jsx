@@ -11,6 +11,7 @@ import { createGroup } from "./CreateGroup.api";
 import { getGroup } from "./GetAllGroupChat.api";
 import { getGroupMessages } from "./getGroupMessages.api";
 import { updateUser } from "./UpdateUser.api";
+import { Logout } from "./Logout.api";
 
 export const UserProvider = ({ children }) => {
     const [loadingCount, setLoadingCount] = useState(0);
@@ -211,6 +212,23 @@ export const UserProvider = ({ children }) => {
             endLoading("groupMessages");
         }
     }, [beginLoading, endLoading])
+
+    //logout
+    const UserLogout = useCallback(async () => {
+        try {
+            const res = await Logout();
+            return {
+                success: true,
+                data: res.data
+            }
+        } catch (e) {
+            console.error("Loi: ", e)
+            return {
+                success: false,
+                error: e
+            }
+        }
+    }, [])
     //fetch user duoc search
     useEffect(
         () => {
@@ -242,7 +260,8 @@ export const UserProvider = ({ children }) => {
             setStatus,
             getFriends,
             createGroups,
-            getGroupMessage
+            getGroupMessage,
+            UserLogout
         }}>
             {children}
         </UserContext.Provider>
