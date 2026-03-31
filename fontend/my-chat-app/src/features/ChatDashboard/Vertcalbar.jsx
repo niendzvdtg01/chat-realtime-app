@@ -39,7 +39,7 @@ export const Verticalbar = (props) => {
                     <div className='d-flex justify-content-center align-items-center'>
                         <img
                             src={userImg}
-                            alt="User"
+                            alt="User"  
                             className='navbar-avatar rounded-circle mt-3'
                             onClick={() => setOpenProfile(true)}
                             style={{ cursor: 'pointer' }}
