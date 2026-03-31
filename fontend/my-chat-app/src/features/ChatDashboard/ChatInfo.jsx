@@ -1,6 +1,9 @@
 import '../../styles/dashboard/chatinfo.scss'
 import userHeadr from '../../assets/dashboard/UsserHeader.png'
+import { ViewProfile } from '../ViewProfile/ViewProfile'
+import { useState } from 'react'
 export const ChatInfo = (props) => {
+    const [viewprofile, setViewProfile] = useState(false)
     const details = props.details
     return (
         <div className="chat-info">
@@ -16,7 +19,7 @@ export const ChatInfo = (props) => {
                 <div className="chat-info-section">
                     <div className="chat-info-section-title">Quick actions</div>
                     <div className="d-grid gap-2">
-                        <button type="button" className="btn btn-outline-primary btn-sm">View profile</button>
+                        <button type="button" className="btn btn-outline-primary btn-sm" onClick={() => { setViewProfile(true) }}>View profile</button>
                         <button type="button" className="btn btn-outline-secondary btn-sm">Mute</button>
                     </div>
                 </div>
@@ -29,6 +32,7 @@ export const ChatInfo = (props) => {
                     </ul>
                 </div>
             </div>
+            <ViewProfile trigger={viewprofile} details={details} setViewProfile={setViewProfile} />
         </div>
     )
 }
