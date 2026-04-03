@@ -16,6 +16,7 @@ import com.example.chatapp.dto.PrivateConversationRequest;
 import com.example.chatapp.entity.Conversations;
 import com.example.chatapp.exception.UserNotFoundException;
 import com.example.chatapp.jpa.respository.ConversationRespository;
+import com.example.chatapp.services.AIService;
 import com.example.chatapp.services.ChatMessageServices;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -30,6 +31,8 @@ public class ChatController {
     private ConversationRespository conversationRespository;
     @Autowired
     private SimpMessagingTemplate simpMessagingTemplate;
+    @Autowired
+    private AIService aiService;
 
     @MessageMapping("/sendMessage")
     public MessageDocument sendMessage(MessageDocument message) {
@@ -51,7 +54,9 @@ public class ChatController {
         if (request.getReceiverId() == currentId) {
             throw new UserNotFoundException("Trung userId");
         }
-        return chatMessageServices.getMessage(currentId, request.getReceiverId());
+        MessageResponse messageResponse = chatMessageServices.getMessage(currentId, request.getReceiverId());
+        aiService.handleAIAsuync(messageResponse.getMessageDocuments());
+        return messageResponse;
     }
 
     @GetMapping(path = "/get_conversation")
