@@ -58,8 +58,8 @@ export const UserList = (props) => {
                         <button
                             type="button"
                             className="user-row"
-                            onClick={() => {
-                                context.handleCreatePrivateConversation(u.userId);
+                            onClick={async () => {
+                                await context.handleCreatePrivateConversation(u.userId);
                                 props.setUserDetail(u)
                             }}
                             key={u.userId ?? `${u.email}-${u.firstName}`}
