@@ -12,7 +12,7 @@ export const ChatMessage = (props) => {
 
     const conversationId = context?.message?.conversationId;
 
-    const { message, sendMessage } = useChat(conversationId);
+    const { message, suggestions, sendMessage } = useChat(conversationId);
 
     const { value, onChange, reset } = useInputState();
 
@@ -74,6 +74,14 @@ export const ChatMessage = (props) => {
 
     console.log(context.friends)
 
+    const handleSuggestionClick = (suggestion) => {
+        onChange({
+            target: {
+                value: suggestion
+            }
+        });
+    };
+
     return (
         <div className='chat-message'>
             <div className="chat-header d-flex">
@@ -103,6 +111,23 @@ export const ChatMessage = (props) => {
                 <div ref={messagesEndRef}></div>
             </div>
             <div className='chat-input'>
+                {conversationId && suggestions.length > 0 && (
+                    <div className='suggestion-panel'>
+                        <div className='suggestion-title'>Goi y AI</div>
+                        <div className='suggestion-list'>
+                            {suggestions.map((suggestion, index) => (
+                                <button
+                                    key={`${conversationId}-${index}-${suggestion}`}
+                                    type="button"
+                                    className='suggestion-chip'
+                                    onClick={() => handleSuggestionClick(suggestion)}
+                                >
+                                    {suggestion}
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+                )}
                 <div className='chat-input-group'>
                     <input
                         type="text"

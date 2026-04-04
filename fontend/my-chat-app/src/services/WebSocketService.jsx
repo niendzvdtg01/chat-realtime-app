@@ -2,15 +2,20 @@ import SockJS from "sockjs-client";
 import { Client } from "@stomp/stompjs";
 
 class WebSocketService {
-
     constructor() {
         this.client = null;
         this.connected = false;
     }
 
-    connect(conversationId, onMessage) {
+    connect(conversationId, handlers = {}) {
+        if (!conversationId) {
+            return;
+        }
+
+        this.disconnect();
 
         const socket = new SockJS("http://localhost:8080/ws");
+        const { onMessage, onSuggestion } = handlers;
 
         this.client = new Client({
             webSocketFactory: () => socket,
@@ -23,7 +28,15 @@ class WebSocketService {
             this.connected = true;
 
             this.client.subscribe(`/topic/conversation/${conversationId}`, (message) => {
-                onMessage(JSON.parse(message.body));
+                if (onMessage) {
+                    onMessage(JSON.parse(message.body));
+                }
+            });
+
+            this.client.subscribe(`/topic/suggestion/${conversationId}`, (message) => {
+                if (onSuggestion) {
+                    onSuggestion(JSON.parse(message.body));
+                }
             });
         };
 
@@ -51,6 +64,7 @@ class WebSocketService {
         if (this.client) {
             this.client.deactivate();
             this.connected = false;
+            this.client = null;
         }
     }
 }
