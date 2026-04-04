@@ -3,9 +3,30 @@ import WebSocketService from "../services/WebSocketService";
 
 export const useChat = (conversationId) => {
     const [message, setMessage] = useState([]);
+    const [suggestions, setSuggestions] = useState([]);
+
     useEffect(() => {
-        WebSocketService.connect(conversationId, (msg) => {
-            setMessage(prev => [...prev, msg]);
+        setMessage([]);
+        setSuggestions([]);
+
+        if (!conversationId) {
+            return undefined;
+        }
+
+        WebSocketService.connect(conversationId, {
+            onMessage: (msg) => {
+                setMessage(prev => [...prev, msg]);
+            },
+            onSuggestion: (items) => {
+                if (Array.isArray(items)) {
+                    setSuggestions(items.filter(Boolean));
+                    return;
+                }
+
+                if (typeof items === "string" && items.trim()) {
+                    setSuggestions([items.trim()]);
+                }
+            }
         });
 
         return () => {
@@ -18,6 +39,7 @@ export const useChat = (conversationId) => {
     };
     return {
         message,
+        suggestions,
         sendMessage
     }
 }
