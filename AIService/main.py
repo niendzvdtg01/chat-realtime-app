@@ -12,21 +12,21 @@ def index():
         "status": "running"
     })
 
-@app.route('/suggest-messages', methods=['POST'])
-def suggest_messages():
-    payload = request.get_json(silent=True) or {}
-    messages = payload.get("messages", [])
-    tone = payload.get("tone", "friendly")
-    count = payload.get("count", 3)
+# @app.route('/suggest-messages', methods=['POST'])
+# def suggest_messages():
+#     payload = request.get_json(silent=True) or {}
+#     messages = payload.get("messages", [])
+#     tone = payload.get("tone", "friendly")
+#     count = payload.get("count", 3)
 
-    if isinstance(messages, str):
-        messages = [messages]
+#     if isinstance(messages, str):
+#         messages = [messages]
 
-    suggestions = ai_agent_service.suggestMessages(messages, tone=tone, count=count)
+#     suggestions = ai_agent_service.suggestMessages(messages, tone=tone, count=count)
 
-    return jsonify({
-        "suggestions": suggestions
-    })
+#     return jsonify({
+#         "suggestions": suggestions
+#     })
 
 @app.route('/ai/chat', methods=['POST'])
 def ai_chat():
