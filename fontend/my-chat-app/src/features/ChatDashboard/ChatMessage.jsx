@@ -18,6 +18,7 @@ export const ChatMessage = (props) => {
 
     const [allMessages, setAllMessages] = useState([]);
 
+    const [suggestApearance, setSuggestApearance] = useState(true)
     const userInfo = context.userInfo;
     const userName = userInfo?.firstName;
 
@@ -111,7 +112,7 @@ export const ChatMessage = (props) => {
                 <div ref={messagesEndRef}></div>
             </div>
             <div className='chat-input'>
-                {conversationId && suggestions.length > 0 && (
+                {suggestApearance && conversationId && suggestions.length > 0 && (
                     <div className='suggestion-panel'>
                         <div className='suggestion-title'>Goi y AI</div>
                         <div className='suggestion-list'>
@@ -120,7 +121,10 @@ export const ChatMessage = (props) => {
                                     key={`${conversationId}-${index}-${suggestion}`}
                                     type="button"
                                     className='suggestion-chip'
-                                    onClick={() => handleSuggestionClick(suggestion)}
+                                    onClick={() => {
+                                        handleSuggestionClick(suggestion)
+                                        setSuggestApearance(false)
+                                    }}
                                 >
                                     {suggestion}
                                 </button>
@@ -140,7 +144,10 @@ export const ChatMessage = (props) => {
                             }
                         }}
                     />
-                    <button onClick={handleSend} aria-label="Send message">
+                    <button onClick={() => {
+                        handleSend()
+                        setSuggestApearance(true)
+                    }} aria-label="Send message">
                         <img src={send} alt="send message" />
                     </button>
                 </div>

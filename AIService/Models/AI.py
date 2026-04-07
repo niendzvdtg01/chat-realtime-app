@@ -8,7 +8,7 @@ import requests
 class AI:
     def __init__(self):
         self._load_env_file()
-        self.model = os.getenv("OLLAMA_MODEL", "gemma4:e2b")
+        self.model = os.getenv("OLLAMA_MODEL", "phi3:mini")
         self.url = os.getenv("OLLAMA_URL", "http://localhost:11434/api/generate")
         self.timeout = int(os.getenv("AI_TIMEOUT", "60"))
         self.keep_alive = os.getenv("OLLAMA_KEEP_ALIVE", "10m")

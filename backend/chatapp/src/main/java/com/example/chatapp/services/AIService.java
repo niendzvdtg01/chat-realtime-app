@@ -51,6 +51,10 @@ public class AIService {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+    }
 
+    @Async("aiExecutor")
+    public void handleCalendarService() {
+        String flaskUrl = "http://localhost:5000/ai/calendar";
     }
 }
