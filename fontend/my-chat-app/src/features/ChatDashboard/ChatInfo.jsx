@@ -1,22 +1,26 @@
 import '../../styles/dashboard/chatinfo.scss'
 import userHeadr from '../../assets/dashboard/UsserHeader.png'
 import { ViewProfile } from '../ViewProfile/ViewProfile'
-import { useState } from 'react'
+import { useContext, useState } from 'react'
+import { UserContext } from '../../services/UserService/UserContext'
 export const ChatInfo = (props) => {
+    const context = useContext(UserContext)
     const [viewprofile, setViewProfile] = useState(false)
     const [showScheduler, setShowScheduler] = useState(false)
     const [scheduleSaved, setScheduleSaved] = useState(false)
+    const [scheduleError, setScheduleError] = useState('')
     const [scheduleDraft, setScheduleDraft] = useState({
         type: 'meeting',
         title: '',
         date: '',
         time: '',
-        mode: 'online',
-        location: '',
-        reminder: '15 minutes before',
-        note: ''
+        notes: ''
     })
     const details = props.details
+    const conversationId = props.conversationId
+    const scheduleLoading = context?.loadingByAction?.createCalendar > 0
+
+    const calendar = props.calendar;
 
     const targetName = details.firstName || details.name || "this chat"
     const membersCount = Array.isArray(details.members) ? details.members.length : 0
@@ -24,14 +28,44 @@ export const ChatInfo = (props) => {
     const handleDraftChange = (event) => {
         const { name, value } = event.target
         setScheduleSaved(false)
+        setScheduleError('')
         setScheduleDraft((prev) => ({
             ...prev,
             [name]: value
         }))
     }
 
-    const handleScheduleSubmit = (event) => {
+    const handleScheduleSubmit = async (event) => {
         event.preventDefault()
+
+        if (!conversationId) {
+            setScheduleSaved(false)
+            setScheduleError('Hay chon mot cuoc tro chuyen truoc khi tao lich.')
+            return
+        }
+
+        if (!scheduleDraft.title.trim() || !scheduleDraft.date || !scheduleDraft.time) {
+            setScheduleSaved(false)
+            setScheduleError('Vui long nhap day du title, date va time.')
+            return
+        }
+
+        const result = await context.handleCreateCalendar({
+            conversationId,
+            type: scheduleDraft.type,
+            title: scheduleDraft.title.trim(),
+            date: scheduleDraft.date,
+            time: scheduleDraft.time,
+            notes: scheduleDraft.notes.trim()
+        })
+
+        if (!result.success) {
+            setScheduleSaved(false)
+            setScheduleError('Khong gui duoc thong tin lich xuong backend.')
+            return
+        }
+
+        setScheduleError('')
         setScheduleSaved(true)
     }
 
@@ -64,20 +98,11 @@ export const ChatInfo = (props) => {
                         <div className="chat-info-section-title">Set up a plan</div>
                         <form className="chat-scheduler-form" onSubmit={handleScheduleSubmit}>
                             <div className="chat-scheduler-grid">
-                                <label className="chat-field">
+                                <label className="chat-field chat-field-wide ">
                                     <span>Type</span>
                                     <select name="type" value={scheduleDraft.type} onChange={handleDraftChange}>
                                         <option value="meeting">Meeting</option>
                                         <option value="event">Event</option>
-                                    </select>
-                                </label>
-                                <label className="chat-field">
-                                    <span>Reminder</span>
-                                    <select name="reminder" value={scheduleDraft.reminder} onChange={handleDraftChange}>
-                                        <option value="15 minutes before">15 minutes before</option>
-                                        <option value="30 minutes before">30 minutes before</option>
-                                        <option value="1 hour before">1 hour before</option>
-                                        <option value="1 day before">1 day before</option>
                                     </select>
                                 </label>
                                 <label className="chat-field chat-field-wide">
@@ -101,9 +126,9 @@ export const ChatInfo = (props) => {
                                 <label className="chat-field chat-field-wide">
                                     <span>Notes</span>
                                     <textarea
-                                        name="note"
+                                        name="notes"
                                         rows="3"
-                                        value={scheduleDraft.note}
+                                        value={scheduleDraft.notes}
                                         onChange={handleDraftChange}
                                         placeholder="Agenda, dress code, files to prepare..."
                                     />
@@ -117,14 +142,16 @@ export const ChatInfo = (props) => {
                                 <div className="scheduler-preview-meta">
                                     <span>{scheduleDraft.date || 'Pick a date'}</span>
                                     <span>{scheduleDraft.time || 'Pick a time'}</span>
-                                    <span>{scheduleDraft.mode}</span>
+                                    <span>{scheduleDraft.type}</span>
                                 </div>
                                 <p>
                                     For {targetName} {membersCount > 0 ? `and ${membersCount} members` : ''}.
                                 </p>
                             </div>
                             <div className="chat-scheduler-actions">
-                                <button type="submit" className="btn btn-primary btn-sm">Save schedule</button>
+                                <button type="submit" className="btn btn-primary btn-sm" disabled={scheduleLoading}>
+                                    {scheduleLoading ? 'Sending...' : 'Save schedule'}
+                                </button>
                                 <button
                                     type="button"
                                     className="btn btn-outline-dark btn-sm"
@@ -134,12 +161,10 @@ export const ChatInfo = (props) => {
                                             title: '',
                                             date: '',
                                             time: '',
-                                            mode: 'online',
-                                            location: '',
-                                            reminder: '15 minutes before',
-                                            note: ''
+                                            notes: ''
                                         })
                                         setScheduleSaved(false)
+                                        setScheduleError('')
                                     }}
                                 >
                                     Reset
@@ -147,10 +172,51 @@ export const ChatInfo = (props) => {
                             </div>
                             {scheduleSaved && (
                                 <div className="chat-scheduler-success">
-                                    Schedule draft saved. You can connect this form to backend later to create real invites.
+                                    Schedule info da duoc gui xuong backend.
+                                </div>
+                            )}
+                            {scheduleError && (
+                                <div className="chat-scheduler-success text-danger">
+                                    {scheduleError}
                                 </div>
                             )}
                         </form>
+                        <div className="chat-scheduler-grid">
+                            <label className="chat-field chat-field-wide ">
+                                {conversationId && calendar && (
+                                    <div>
+                                        <span>Your calendar</span>
+                                        <div className='chat-field chat-field-wide'>
+                                            {calendar.message && (
+                                                <div>{calendar.message}</div>
+                                            )}
+                                            {calendar.next_question && (
+                                                <div>{calendar.next_question}</div>
+                                            )}
+                                            {calendar.meet_link && (
+                                                <a href={calendar.meet_link} target="_blank" rel="noreferrer">
+                                                    {calendar.meet_link}
+                                                </a>
+                                            )}
+                                            {Array.isArray(calendar.items) && calendar.items.length > 0 && (
+                                                <div>
+                                                    {calendar.items.map((item, index) => (
+                                                        <button key={index}>
+                                                            {item}
+                                                        </button>
+                                                    ))}
+                                                </div>
+                                            )}
+                                            {Array.isArray(calendar.missing_fields) && calendar.missing_fields.length > 0 && (
+                                                <div>
+                                                    Missing: {calendar.missing_fields.join(", ")}
+                                                </div>
+                                            )}
+                                        </div>
+                                    </div>
+                                )}
+                            </label>
+                        </div>
                     </div>
                 )}
                 <div className="chat-info-section">

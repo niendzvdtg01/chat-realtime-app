@@ -54,7 +54,9 @@ def ai_calendar():
         }), 400
 
     results = calendar_agent_service.run(message)
-    return jsonify(results)
+    return jsonify({
+        "reply":results
+    })
 
 if __name__ == '__main__':
     app.run(debug=True)

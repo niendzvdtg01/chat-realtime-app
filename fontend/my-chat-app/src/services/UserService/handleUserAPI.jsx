@@ -12,6 +12,7 @@ import { getGroup } from "./GetAllGroupChat.api";
 import { getGroupMessages } from "./getGroupMessages.api";
 import { updateUser } from "./UpdateUser.api";
 import { Logout } from "./Logout.api";
+import { createCalendar } from "./CreateCalendar.api";
 
 export const UserProvider = ({ children }) => {
     const [loadingCount, setLoadingCount] = useState(0);
@@ -229,6 +230,25 @@ export const UserProvider = ({ children }) => {
             }
         }
     }, [])
+
+    const handleCreateCalendar = useCallback(async (data) => {
+        try {
+            beginLoading("createCalendar");
+            const res = await createCalendar(data);
+            return {
+                success: true,
+                data: res.data
+            };
+        } catch (e) {
+            console.error("Loi: ", e);
+            return {
+                success: false,
+                error: e
+            };
+        } finally {
+            endLoading("createCalendar");
+        }
+    }, [beginLoading, endLoading])
     //fetch user duoc search
     useEffect(
         () => {
@@ -261,7 +281,8 @@ export const UserProvider = ({ children }) => {
             getFriends,
             createGroups,
             getGroupMessage,
-            UserLogout
+            UserLogout,
+            handleCreateCalendar
         }}>
             {children}
         </UserContext.Provider>

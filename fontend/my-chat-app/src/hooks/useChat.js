@@ -4,10 +4,12 @@ import WebSocketService from "../services/WebSocketService";
 export const useChat = (conversationId) => {
     const [message, setMessage] = useState([]);
     const [suggestions, setSuggestions] = useState([]);
+    const [calendar, setCalendar] = useState(null);
 
     useEffect(() => {
         setMessage([]);
         setSuggestions([]);
+        setCalendar(null);
 
         if (!conversationId) {
             return undefined;
@@ -26,6 +28,27 @@ export const useChat = (conversationId) => {
                 if (typeof items === "string" && items.trim()) {
                     setSuggestions([items.trim()]);
                 }
+            },
+            onCalendar: (items) => {
+                if (Array.isArray(items)) {
+                    setCalendar({
+                        status: "success",
+                        items: items.filter(Boolean),
+                    });
+                    return;
+                }
+
+                if (typeof items === "string" && items.trim()) {
+                    setCalendar({
+                        status: "success",
+                        message: items.trim(),
+                    });
+                    return;
+                }
+
+                if (items && typeof items === "object") {
+                    setCalendar(items);
+                }
             }
         });
 
@@ -40,6 +63,7 @@ export const useChat = (conversationId) => {
     return {
         message,
         suggestions,
+        calendar,
         sendMessage
     }
 }

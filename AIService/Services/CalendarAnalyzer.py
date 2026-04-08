@@ -1,4 +1,5 @@
 import json
+from datetime import datetime, timedelta
 
 try:
     from CalendarTool import create_meet
@@ -84,8 +85,16 @@ Rules:
             if not normalized[field] and field not in normalized["missing_fields"]:
                 normalized["missing_fields"].append(field)
 
-        if not normalized["attendees"] and "attendees" not in normalized["missing_fields"]:
-            normalized["missing_fields"].append("attendees")
+        if normalized["start_time"] and not normalized["end_time"]:
+            try:
+                start_dt = datetime.fromisoformat(normalized["start_time"])
+                normalized["end_time"] = (start_dt + timedelta(hours=1)).isoformat()
+                normalized["missing_fields"] = [
+                    field for field in normalized["missing_fields"] if field != "end_time"
+                ]
+            except ValueError:
+                if "end_time" not in normalized["missing_fields"]:
+                    normalized["missing_fields"].append("end_time")
 
         return normalized
 
@@ -94,7 +103,7 @@ Rules:
             "title": "Ban muon dat ten cuoc hop la gi?",
             "start_time": "Ban muon bat dau cuoc hop luc nao?",
             "end_time": "Cuoc hop se ket thuc luc nao?",
-            "attendees": "Ban muon moi nhung ai? Hay gui danh sach email nguoi tham gia.",
+            "attendees": "Ban muon moi nhung ai? Hay gui danh sach email nguoi tham gia neu can.",
         }
 
         prompts = [questions[field] for field in missing_fields if field in questions]
@@ -136,7 +145,13 @@ Rules:
                 "intent": intent,
             }
 
-        if intent.get("missing_fields"):
+        required_missing_fields = [
+            field for field in intent.get("missing_fields", [])
+            if field in {"title", "start_time", "end_time"}
+        ]
+
+        if required_missing_fields:
+            intent["missing_fields"] = required_missing_fields
             return self._build_clarification_response(intent)
 
         try:
@@ -144,6 +159,7 @@ Rules:
             results["action"] = "create_meeting"
             results["intent"] = intent
             results["message"] = "Da tao lich hop online thanh cong."
+            print(results)
             return results
         except Exception as ex:
             return {
