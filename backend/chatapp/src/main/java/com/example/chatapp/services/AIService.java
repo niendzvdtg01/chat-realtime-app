@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.StringJoiner;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import com.example.chatapp.MongodbModel.MessageDocument;
+import com.example.chatapp.dto.CalendarRequest;
 
 @Service
 public class AIService {
@@ -54,7 +56,43 @@ public class AIService {
     }
 
     @Async("aiExecutor")
-    public void handleCalendarService() {
-        String flaskUrl = "http://localhost:5000/ai/calendar";
+    public void handleCalendarService(CalendarRequest request) {
+        try {
+            if (request == null)
+                return;
+            String flaskUrl = "http://localhost:5000/ai/calendar";
+            Map<String, Object> body = new HashMap<>();
+            body.put("message", buildCalendarMessage(request));
+            //
+            ResponseEntity<Map> response = restTemplate.postForEntity(flaskUrl, body, Map.class);
+            //
+            Object reply = response.getBody().get("reply");
+            messagingTemplate.convertAndSend("/topic/calendar/" + request.getConversationId(), reply);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+    }
+
+    private String buildCalendarMessage(CalendarRequest request) {
+        StringJoiner joiner = new StringJoiner(". ");
+
+        if (request.getType() != null && !request.getType().isBlank()) {
+            joiner.add("Loai lich la " + request.getType().trim());
+        }
+        if (request.getTitle() != null && !request.getTitle().isBlank()) {
+            joiner.add("Tieu de la " + request.getTitle().trim());
+        }
+        if (request.getDate() != null) {
+            joiner.add("Ngay dien ra la " + request.getDate());
+        }
+        if (request.getTime() != null) {
+            joiner.add("Gio bat dau la " + request.getTime());
+        }
+        if (request.getNotes() != null && !request.getNotes().isBlank()) {
+            joiner.add("Ghi chu la " + request.getNotes().trim());
+        }
+
+        return joiner.toString();
     }
 }

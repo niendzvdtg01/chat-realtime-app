@@ -2,17 +2,16 @@ import '../../styles/dashboard/chatmessage.scss'
 import userHeadr from '../../assets/dashboard/UsserHeader.png'
 import send from '../../assets/dashboard/paper-plane-solid-full.svg'
 import { useContext, useEffect, useState, useRef } from 'react'
-import { useChat } from '../../hooks/useChat'
 import useInputState from '../../hooks/useInputState'
 import { UserContext } from '../../services/UserService/UserContext'
 
 export const ChatMessage = (props) => {
 
     const context = useContext(UserContext);
-
-    const conversationId = context?.message?.conversationId;
-
-    const { message, suggestions, sendMessage } = useChat(conversationId);
+    const conversationId = props.conversationId;
+    const message = props.message ?? [];
+    const suggestions = props.suggestions ?? [];
+    const sendMessage = props.sendMessage;
 
     const { value, onChange, reset } = useInputState();
 
@@ -23,8 +22,6 @@ export const ChatMessage = (props) => {
     const userName = userInfo?.firstName;
 
     const messagesEndRef = useRef(null);
-
-    console.log(conversationId);
 
     /* Load message lần đầu khi đổi conversation */
     useEffect(() => {
@@ -68,12 +65,9 @@ export const ChatMessage = (props) => {
             sender: userName?.toString(),
             content: value
         });
-
         reset();
 
     }
-
-    console.log(context.friends)
 
     const handleSuggestionClick = (suggestion) => {
         onChange({
@@ -146,7 +140,7 @@ export const ChatMessage = (props) => {
                     />
                     <button onClick={() => {
                         handleSend()
-                        setSuggestApearance(true)
+                        suggestApearance(true)
                     }} aria-label="Send message">
                         <img src={send} alt="send message" />
                     </button>
