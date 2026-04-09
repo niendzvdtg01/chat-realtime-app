@@ -2,22 +2,23 @@ import os
 from collections import OrderedDict
 from pathlib import Path
 
-import requests
+from openai import OpenAI
 
 
 class AI:
     def __init__(self):
         self._load_env_file()
-        self.model = os.getenv("OLLAMA_MODEL", "phi3:mini")
-        self.url = os.getenv("OLLAMA_URL", "http://localhost:11434/api/generate")
+
+        # OpenAI config
+        self.client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+        self.model = os.getenv("OPENAI_MODEL", "gpt-5-mini")
+
+        # Config
         self.timeout = int(os.getenv("AI_TIMEOUT", "60"))
-        self.keep_alive = os.getenv("OLLAMA_KEEP_ALIVE", "10m")
         self.max_cache_size = int(os.getenv("AI_CACHE_SIZE", "100"))
         self.default_max_tokens = int(os.getenv("AI_MAX_TOKENS", "256"))
         self.retry_max_tokens = int(os.getenv("AI_RETRY_MAX_TOKENS", "512"))
 
-        # Reuse the same HTTP connection to reduce local inference overhead.
-        self.session = requests.Session()
         self.cache = OrderedDict()
 
     def _load_env_file(self):
@@ -33,58 +34,115 @@ class AI:
             key, value = line.split("=", 1)
             os.environ.setdefault(key.strip(), value.strip())
 
-    def _get_cached(self, prompt):
-        cached = self.cache.get(prompt)
+    #  FIX: cache theo (prompt + model + max_tokens)
+    def _make_cache_key(self, prompt, max_tokens):
+        return f"{self.model}:{max_tokens}:{prompt}"
+
+    def _get_cached(self, key):
+        cached = self.cache.get(key)
         if cached is None:
             return None
-
-        self.cache.move_to_end(prompt)
+        self.cache.move_to_end(key)
         return cached
 
-    def _set_cache(self, prompt, results):
-        self.cache[prompt] = results
-        self.cache.move_to_end(prompt)
+    def _set_cache(self, key, results):
+        self.cache[key] = results
+        self.cache.move_to_end(key)
 
         while len(self.cache) > self.max_cache_size:
             self.cache.popitem(last=False)
 
-    def _request(self, prompt, max_tokens, temperature):
-        prompt = str(prompt).strip()
-        if not prompt:
-            return {"response": "", "done_reason": "empty_prompt"}
-
+    def _request(self, prompt, max_tokens,  temperature=None):
         try:
-            response = self.session.post(
-                self.url,
-                json={
-                    "model": self.model,
-                    "prompt": prompt,
-                    "stream": False,
-                    "keep_alive": self.keep_alive,
-                    "options": {
-                        "num_predict": max_tokens,
-                        "temperature": temperature,
-                    },
-                },
-                timeout=self.timeout,
+            request_kwargs = {
+                "model": self.model,
+                "messages": [
+                    {"role": "user", "content": prompt}
+                ],
+                "max_completion_tokens": max_tokens,
+                "timeout": self.timeout,
+            }
+
+            if temperature is not None:
+                request_kwargs["temperature"] = temperature
+
+            response = self.client.chat.completions.create(
+                **request_kwargs
             )
-        except requests.RequestException as ex:
-            raise ValueError(
-                f"Khong the ket noi toi local AI tai {self.url}. Hay kiem tra Ollama/model dang chay. Chi tiet: {ex}"
-            ) from ex
+            return response
 
-        if not response.ok:
-            try:
-                error_payload = response.json()
-            except ValueError:
-                error_payload = {"error": {"message": response.text}}
-            raise ValueError(
-                error_payload.get("error", {}).get("message", "Local AI request failed.")
-            )
+        except Exception as ex:
+            raise ValueError(f"OpenAI request failed: {ex}") from ex
 
-        return response.json()
+    def _extract_text(self, response):
+        output_text = getattr(response, "output_text", None)
+        if isinstance(output_text, str) and output_text.strip():
+            return output_text.strip()
 
-    def generate(self, prompt, max_tokens=None, temperature=0.2, use_cache=True):
+        choices = getattr(response, "choices", None) or []
+        if not choices:
+            return ""
+
+        message = getattr(choices[0], "message", None)
+        if message is None:
+            return ""
+
+        content = getattr(message, "content", None)
+
+        if isinstance(content, str):
+            return content.strip()
+
+        if isinstance(content, list):
+            parts = []
+            for item in content:
+                if isinstance(item, str):
+                    if item.strip():
+                        parts.append(item.strip())
+                    continue
+
+                text_value = None
+                if hasattr(item, "text"):
+                    text_value = getattr(item, "text", None)
+                elif isinstance(item, dict):
+                    text_value = item.get("text")
+
+                if isinstance(text_value, str) and text_value.strip():
+                    parts.append(text_value.strip())
+                elif hasattr(text_value, "value"):
+                    nested_value = getattr(text_value, "value", None)
+                    if isinstance(nested_value, str) and nested_value.strip():
+                        parts.append(nested_value.strip())
+
+            return "\n".join(parts).strip()
+
+        return ""
+
+    def _response_debug(self, response):
+        details = []
+
+        choices = getattr(response, "choices", None) or []
+        if choices:
+            choice = choices[0]
+            finish_reason = getattr(choice, "finish_reason", None)
+            if finish_reason:
+                details.append(f"finish_reason={finish_reason}")
+
+            message = getattr(choice, "message", None)
+            if message is not None:
+                refusal = getattr(message, "refusal", None)
+                if refusal:
+                    details.append(f"refusal={refusal}")
+
+                content = getattr(message, "content", None)
+                if content is not None:
+                    details.append(f"content_type={type(content).__name__}")
+
+        if not details:
+            details.append(f"response_type={type(response).__name__}")
+
+        return ", ".join(details)
+
+    def generate(self, prompt, max_tokens=None, temperature=1, use_cache=True):
         prompt = str(prompt).strip()
         if not prompt:
             return ""
@@ -92,37 +150,27 @@ class AI:
         if max_tokens is None:
             max_tokens = self.default_max_tokens
 
+        cache_key = self._make_cache_key(prompt, max_tokens)
+
         if use_cache:
-            cached = self._get_cached(prompt)
+            cached = self._get_cached(cache_key)
             if cached is not None:
                 return cached
 
-        data = self._request(prompt, max_tokens=max_tokens, temperature=temperature)
-        results = data.get("response", "").strip()
-        if not results:
-            error_message = data.get("error")
-            done_reason = data.get("done_reason", "unknown")
+        response = self._request(prompt, max_tokens, temperature)
+        result = self._extract_text(response)
+        debug_info = self._response_debug(response)
 
-            if done_reason == "length" and self.retry_max_tokens > max_tokens:
-                data = self._request(
-                    prompt,
-                    max_tokens=self.retry_max_tokens,
-                    temperature=temperature,
-                )
-                results = data.get("response", "").strip()
-                done_reason = data.get("done_reason", done_reason)
+        # retry nếu bị cắt output
+        if not result and self.retry_max_tokens > max_tokens:
+            response = self._request(prompt, self.retry_max_tokens, temperature)
+            result = self._extract_text(response)
+            debug_info = self._response_debug(response)
 
-            if error_message:
-                raise ValueError(str(error_message))
-            if results:
-                if use_cache:
-                    self._set_cache(prompt, results)
-                return results
-            raise ValueError(
-                f"Local AI tra ve rong. done_reason={done_reason}, model={self.model}"
-            )
+        if not result:
+            raise ValueError(f"OpenAI trả về rỗng ({debug_info})")
 
-        if use_cache and results:
-            self._set_cache(prompt, results)
+        if use_cache:
+            self._set_cache(cache_key, result)
 
-        return results
+        return result

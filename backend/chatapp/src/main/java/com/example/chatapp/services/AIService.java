@@ -68,10 +68,10 @@ public class AIService {
             //
             Object reply = response.getBody().get("reply");
             messagingTemplate.convertAndSend("/topic/calendar/" + request.getConversationId(), reply);
+            System.out.println(reply);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-
     }
 
     private String buildCalendarMessage(CalendarRequest request) {
