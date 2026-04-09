@@ -60,8 +60,8 @@ class AIAgentService:
             prompt = self._build_prompt(conversation, tone, safe_count)
             ai_text = self.ai.generate(
                 prompt,
-                max_tokens=max(160, safe_count * 80),
-                temperature=0.15,
+                max_tokens=max(320, safe_count * 120),
+                temperature=1,
             ).strip()
             print(ai_text)
             if not ai_text:
