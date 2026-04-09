@@ -11,7 +11,6 @@ try:
 except ImportError:
     from AIService.Models.AI import AI
 
-
 class CalendarAnalyzer:
     def __init__(self):
         self.ai = AI()

@@ -1,9 +1,14 @@
 # python AIService/main.py
-from flask import Flask, jsonify, request
+from flask import  jsonify, request
 from Services.AIAgentsService import AIAgentService
 from Services.CalendarAnalyzer import CalendarAgentService
+from Models.Database import Database
 
-app = Flask(__name__)
+from Models.MeetingRaw import MeetingRaw
+from Models.db import db
+
+database = Database()
+app = database.create_app()
 ai_agent_service = AIAgentService()
 calendar_agent_service = CalendarAgentService()
 
@@ -54,6 +59,12 @@ def ai_calendar():
         }), 400
 
     results = calendar_agent_service.run(message)
+    #Insert vao co so du lieu
+    with app.app_context():
+        new_meeting = MeetingRaw(data = results)
+
+        db.session.add(new_meeting)
+        db.session.commit()
     return jsonify({
         "reply":results
     })

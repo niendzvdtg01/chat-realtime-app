@@ -1,14 +1,15 @@
-from google_auth_oauthlib.flow import InstalledAppFlow
+from flask import Flask
+from flask_sqlalchemy import SQLAlchemy
+import os
 
-SCOPES = ['https://www.googleapis.com/auth/calendar']
+app = Flask(__name__)
 
-flow = InstalledAppFlow.from_client_secrets_file(
-    'credentials.json', SCOPES)
+app.config["SQLALCHEMY_DATABASE_URI"] = ("mysql+pymysql://admin:1234@localhost:310/shop_db")
 
-creds = flow.run_local_server(port=0)
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
-# save token
-with open('token.json', 'w') as token:
-    token.write(creds.to_json())
+db = SQLAlchemy(app)
 
-print("Done!")
+print(db.JSON)
+
+
