@@ -3,6 +3,7 @@ from flask import  jsonify, request
 from Services.AIAgentsService import AIAgentService
 from Services.CalendarAnalyzer import CalendarAgentService
 from Models.Database import Database
+from Services.CalendarNotification import CalendarNotification
 
 from Models.MeetingRaw import MeetingRaw
 from Models.db import db
@@ -11,6 +12,7 @@ database = Database()
 app = database.create_app()
 ai_agent_service = AIAgentService()
 calendar_agent_service = CalendarAgentService()
+calendar_notification = CalendarNotification()
 
 @app.route('/')
 def index():
@@ -67,6 +69,15 @@ def ai_calendar():
         db.session.commit()
     return jsonify({
         "reply":results
+    })
+
+app.route('ai/calendar_notification', method=['GET'])
+def get_calendar_notification():
+    with app.app_context():
+        results = calendar_notification.querry_db()
+    
+    return  jsonify({
+        "reply": results
     })
 
 if __name__ == '__main__':

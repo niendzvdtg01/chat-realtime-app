@@ -95,4 +95,10 @@ public class AIService {
 
         return joiner.toString();
     }
+
+    // send notification for frontend
+    public void sendCalendarNotification() {
+        String flaskUrl = "http://localhost:5000/ai/calendar_notification";
+
+    }
 }
