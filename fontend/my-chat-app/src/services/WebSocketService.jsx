@@ -15,7 +15,7 @@ class WebSocketService {
         this.disconnect();
 
         const socket = new SockJS("http://localhost:8080/ws");
-        const { onMessage, onSuggestion, onCalendar } = handlers;
+        const { onMessage, onSuggestion, onCalendar, onCalendarNotification } = handlers;
 
         this.client = new Client({
             webSocketFactory: () => socket,
@@ -41,6 +41,11 @@ class WebSocketService {
             this.client.subscribe(`/topic/calendar/${conversationId}`, (message) => {
                 if (onCalendar) {
                     onCalendar(JSON.parse(message.body));
+                }
+            });
+            this.client.subscribe(`/topic/calendar_notification/${conversationId}`, (message) => {
+                if (onCalendarNotification) {
+                    onCalendarNotification(JSON.parse(message.body));
                 }
             });
         };

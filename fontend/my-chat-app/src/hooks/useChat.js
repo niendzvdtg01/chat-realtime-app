@@ -5,11 +5,13 @@ export const useChat = (conversationId) => {
     const [message, setMessage] = useState([]);
     const [suggestions, setSuggestions] = useState([]);
     const [calendar, setCalendar] = useState(null);
+    const [calendarNotification, setCalendarNotification] = useState(null);
 
     useEffect(() => {
         setMessage([]);
         setSuggestions([]);
         setCalendar(null);
+        setCalendarNotification(null)
 
         if (!conversationId) {
             return undefined;
@@ -49,6 +51,27 @@ export const useChat = (conversationId) => {
                 if (items && typeof items === "object") {
                     setCalendar(items);
                 }
+            },
+            onCalendarNotification: (items) => {
+                if (Array.isArray(items)) {
+                    setCalendarNotification({
+                        status: "success",
+                        items: items.filter(Boolean),
+                    });
+                    return;
+                }
+
+                if (typeof items === "string" && items.trim()) {
+                    setCalendarNotification({
+                        status: "success",
+                        message: items.trim(),
+                    });
+                    return;
+                }
+
+                if (items && typeof items === "object") {
+                    setCalendarNotification(items);
+                }
             }
         });
 
@@ -64,6 +87,7 @@ export const useChat = (conversationId) => {
         message,
         suggestions,
         calendar,
+        calendarNotification,
         sendMessage
     }
 }

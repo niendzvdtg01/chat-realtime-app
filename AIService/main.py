@@ -71,7 +71,7 @@ def ai_calendar():
         "reply":results
     })
 
-app.route('ai/calendar_notification', method=['GET'])
+@app.route('/ai/calendar_notification', methods=['GET'])
 def get_calendar_notification():
     with app.app_context():
         results = calendar_notification.querry_db()

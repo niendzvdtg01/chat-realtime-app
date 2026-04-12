@@ -48,6 +48,7 @@ function DashboardContent() {
                         details={userDetail}
                         conversationId={conversationId}
                         calendar={chatState.calendar}
+                        calendarNotification={chatState.calendarNotification}
                     />
                 </div>
             </div>

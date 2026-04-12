@@ -97,8 +97,16 @@ public class AIService {
     }
 
     // send notification for frontend
-    public void sendCalendarNotification() {
-        String flaskUrl = "http://localhost:5000/ai/calendar_notification";
-
+    public Object sendCalendarNotification(Integer conversationId) {
+        try {
+            String flaskUrl = "http://localhost:5000/ai/calendar_notification";
+            ResponseEntity<Map> response = restTemplate.getForEntity(flaskUrl, Map.class);
+            Object reply = response.getBody().get("reply");
+            messagingTemplate.convertAndSend("/topic/calendar_notification/" + conversationId, reply);
+            return reply;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return null;
+        }
     }
 }

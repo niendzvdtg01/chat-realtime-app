@@ -1,7 +1,7 @@
 import '../../styles/dashboard/chatinfo.scss'
 import userHeadr from '../../assets/dashboard/UsserHeader.png'
 import { ViewProfile } from '../ViewProfile/ViewProfile'
-import { useContext, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { UserContext } from '../../services/UserService/UserContext'
 export const ChatInfo = (props) => {
     const context = useContext(UserContext)
@@ -9,6 +9,7 @@ export const ChatInfo = (props) => {
     const [showScheduler, setShowScheduler] = useState(false)
     const [scheduleSaved, setScheduleSaved] = useState(false)
     const [scheduleError, setScheduleError] = useState('')
+    const [calendarNotificationData, setCalendarNotificationData] = useState(null)
     const [scheduleDraft, setScheduleDraft] = useState({
         type: 'meeting',
         title: '',
@@ -69,6 +70,31 @@ export const ChatInfo = (props) => {
         setScheduleSaved(true)
     }
 
+    useEffect(() => {
+        if (!conversationId) {
+            setCalendarNotificationData(null)
+            return
+        }
+
+        let ignore = false
+
+        const loadCalendarNotification = async () => {
+            const result = await context.getCalendarNotification(conversationId)
+
+            if (!ignore && result?.success && result.data) {
+                setCalendarNotificationData(result.data)
+            }
+        }
+
+        loadCalendarNotification()
+
+        return () => {
+            ignore = true
+        }
+    }, [conversationId, context.getCalendarNotification])
+
+
+    const calendarNotification = props.calendarNotification || calendarNotificationData;
     return (
         <div className="chat-info">
             <div className="chat-info-header d-flex justify-content-center">
@@ -227,6 +253,24 @@ export const ChatInfo = (props) => {
                         <li className="list-group-item text-center">{membersCount || "members"}</li>
                     </ul>
                 </div>
+
+                {calendarNotification && (
+                    <div className='chat-info-section'>
+                        <div style={{
+                            color: "red"
+                        }}>
+                            {calendarNotification.message && (
+                                <h5>{calendarNotification.message}</h5>
+                            )}
+                            {!calendarNotification.message && calendarNotification.content && (
+                                <h5>{calendarNotification.content}</h5>
+                            )}
+                            {Array.isArray(calendarNotification.items) && calendarNotification.items.map((item, index) => (
+                                <h5 key={index}>{item}</h5>
+                            ))}
+                        </div>
+                    </div>
+                )}
             </div>
             <ViewProfile trigger={viewprofile} details={details} setViewProfile={setViewProfile} />
         </div>
