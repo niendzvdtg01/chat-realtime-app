@@ -1,16 +1,42 @@
-# React + Vite
+# Frontend Chat App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Frontend cua du an chat realtime, duoc xay dung bang React + Vite.
 
-Currently, two official plugins are available:
+## Chuc nang chinh
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- Dang nhap, dang ky, va hien thong tin user.
+- Tim kiem user, ket ban, va quan ly conversation.
+- Chat realtime qua SockJS/STOMP.
+- Nhan goi y tra loi AI theo conversation.
+- Tao lich hop/su kien ngay trong `ChatInfo`.
+- Hien calendar notification trong `ChatInfo`.
 
-## React Compiler
+## Lenh chay nhanh
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+```bash
+npm install
+npm run dev
+```
 
-## Expanding the ESLint configuration
+Frontend mac dinh chay o:
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- `http://localhost:5173`
+
+API backend va websocket hien dang tro den:
+
+- REST API: `http://localhost:8080`
+- WebSocket: `http://localhost:8080/ws`
+
+## File quan trong
+
+- `src/pages/ChatDashboard.jsx`: layout chinh cua dashboard.
+- `src/hooks/useChat.js`: quan ly state message, suggestions, calendar, notification.
+- `src/services/WebSocketService.jsx`: dang ky cac topic STOMP theo `conversationId`.
+- `src/features/ChatDashboard/ChatMessage.jsx`: khung chat.
+- `src/features/ChatDashboard/ChatInfo.jsx`: profile, scheduler, calendar result, calendar notification.
+
+## Ghi chu ve calendar notification
+
+- Khi nguoi dung mo mot conversation, `ChatInfo` se goi endpoint REST lay notification moi nhat.
+- Backend dong thoi push notification len websocket de cac client dang mo cung conversation co the cap nhat.
+- UI uu tien du lieu tra ve tu REST de tranh mat message khi websocket subscribe cham hon response.

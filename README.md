@@ -4,9 +4,9 @@ Ung dung chat realtime gom 3 phan chinh:
 
 - `fontend/my-chat-app`: frontend su dung React + Vite.
 - `backend/chatapp`: backend su dung Spring Boot, MySQL, MongoDB, WebSocket/STOMP va Spring Security.
-- `AIService`: microservice Python/Flask dung de sinh goi y tin nhan AI.
+- `AIService`: microservice Python/Flask dung de sinh goi y tin nhan AI va xu ly luong calendar.
 
-Du an nay cho phep dang ky, dang nhap, tim kiem user, ket ban, tao cuoc tro chuyen 1-1, tao group, chat realtime, nhan goi y tra loi AI, va hien tai da co giao dien dat hen cuoc hop/su kien trong khu vuc thong tin chat.
+Du an cho phep dang ky, dang nhap, tim kiem user, ket ban, tao cuoc tro chuyen 1-1, tao group, chat realtime, nhan goi y tra loi AI, tao lich hop/su kien, va hien notification lich trong khu vuc thong tin chat.
 
 ## 1. Tinh nang chinh
 
@@ -22,6 +22,7 @@ Du an nay cho phep dang ky, dang nhap, tim kiem user, ket ban, tao cuoc tro chuy
 - Quan ly user va conversation metadata trong MySQL.
 - Goi AI service de sinh goi y phan hoi theo ngu canh hoi thoai.
 - Giao dien scheduler tren frontend de dat lich hop/su kien ngay trong khung thong tin chat.
+- Notification lich hop duoc dong bo ve giao dien chat info.
 
 ## 2. Kien truc tong quan
 
@@ -46,6 +47,15 @@ Luong chat AI:
 2. Backend tra ve message va dong thoi goi bat dong bo sang `AIService`.
 3. `AIService` phan tich hoi thoai va sinh cac cau goi y.
 4. Backend day goi y AI ve frontend qua topic WebSocket `/topic/suggestion/{conversationId}`.
+
+Luong calendar:
+
+1. Frontend gui thong tin scheduler len backend qua `POST /api/ai/calendar`.
+2. Backend goi Flask `POST /ai/calendar` de phan tich va tao lich hop.
+3. Flask tra ve ket qua tao lich, backend push len WebSocket topic `/topic/calendar/{conversationId}`.
+4. Khi mo conversation, frontend goi `GET /api/ai/get_calendar_notifications?conversationId=...`.
+5. Backend lay notification tu Flask `GET /ai/calendar_notification`, vua tra response HTTP cho frontend vua push them len topic `/topic/calendar_notification/{conversationId}`.
+6. Frontend uu tien du lieu tra ve truc tiep tu REST de tranh truong hop websocket den som hon luc client subscribe.
 
 ## 3. Cong nghe su dung
 
@@ -77,8 +87,8 @@ Luong chat AI:
 
 - Python 3
 - Flask
-- Requests
-- Local AI qua Ollama HTTP API
+- OpenAI Python SDK
+- Google Calendar API
 
 ## 4. Cau truc thu muc
 
@@ -123,10 +133,11 @@ ChatApp/
 - `src/pages/LoginPage.jsx`: trang dang nhap/dang ky.
 - `src/pages/ChatDashboard.jsx`: man hinh chat chinh.
 - `src/features/ChatDashboard/ChatMessage.jsx`: khung chat, input va goi y AI.
-- `src/features/ChatDashboard/ChatInfo.jsx`: thong tin user/group, quick actions, scheduler.
+- `src/features/ChatDashboard/ChatInfo.jsx`: thong tin user/group, quick actions, scheduler, va notification lich.
 - `src/features/GroupChat/*`: giao dien tao group va them thanh vien.
 - `src/services/WebSocketService.jsx`: ket noi SockJS/STOMP den backend.
 - `src/services/UserService/*`: cac API axios lien quan den user, conversation, group, request.
+- `src/hooks/useChat.js`: quan ly state message, AI suggestions, calendar, calendar notification.
 
 ### Backend `backend/chatapp`
 
@@ -135,16 +146,18 @@ ChatApp/
 - `controller/FriendRequestController.java`: gui, lay va cap nhat request ket ban.
 - `controller/GroupChatController.java`: tao group, lay group, lay message group.
 - `controller/ChatController.java`: lay message private, WebSocket send message, kick AI generation.
-- `services/AIService.java`: goi `AIService` Flask va publish ket qua len WebSocket.
+- `controller/AIController.java`: endpoint tao lich va lay calendar notification.
+- `services/AIService.java`: goi `AIService` Flask, publish ket qua len WebSocket, va tra notification qua REST fallback.
 - `config/WebConfig.java`: khai bao endpoint `/ws`, broker `/topic`, app prefix `/app`.
 
 ### AI Service `AIService`
 
-- `main.py`: Flask app va endpoint `/ai/chat`.
-- `Models/AI.py`: ket noi local AI provider qua HTTP API.
-- `Services/Analyzer.py`: phan tich ngu canh hoi thoai.
-- `Services/Planner.py`: xay dung chien luoc phan hoi.
-- `Services/AIAgentsService.py`: tong hop phan tich + lap ke hoach + sinh goi y + fallback.
+- `main.py`: Flask app va cac endpoint `/ai/chat`, `/ai/calendar`, `/ai/calendar_notification`.
+- `Models/AI.py`: goi OpenAI Responses API.
+- `Services/AIAgentsService.py`: sinh goi y tin nhan theo ngu canh hoi thoai.
+- `Services/CalendarAnalyzer.py`: phan tich du lieu scheduler va tao payload lich hop.
+- `Services/CreateMeeting.py`: goi Google Calendar API de tao meeting/event.
+- `Services/CalendarNotification.py`: tao notification ngan gon tu lich hop gan nhat trong DB.
 
 ## 6. Yeu cau moi truong
 
@@ -157,7 +170,8 @@ Can co cac thanh phan sau:
 - Python 3
 - MySQL
 - MongoDB
-- Ollama neu muon dung AI local that
+- Google Calendar credentials neu muon tao lich that
+- OpenAI API key cho AI service
 
 ## 7. Cau hinh hien tai trong repo
 
@@ -183,21 +197,22 @@ File [WebSocketService.jsx](/home/nien/Project/ChatApp/fontend/my-chat-app/src/s
 
 ### AI Service
 
-File [AIService/.env](/home/nien/Project/ChatApp/AIService/.env) dang co:
+File [AIService/.env](/home/nien/Project/ChatApp/AIService/.env) nen co:
 
 ```env
+OPENAI_API_KEY=your_key
+OPENAI_MODEL=gpt-5-mini
 AI_TIMEOUT=30
 AI_MAX_TOKENS=256
 AI_RETRY_MAX_TOKENS=512
+AI_REASONING_EFFORT=low
 ```
 
-Neu muon su dung Ollama ro rang hon, ban co the them:
+Neu muon tao lich that voi Google Calendar, can them:
 
 ```env
-OLLAMA_URL=http://localhost:11434/api/generate
-OLLAMA_MODEL=llama3.2:3b
-OLLAMA_KEEP_ALIVE=10m
-AI_CACHE_SIZE=100
+credentials.json
+token.json
 ```
 
 ## 8. Cach chay du an
@@ -233,7 +248,7 @@ Tu thu muc goc project:
 cd AIService
 python3 -m venv .venv
 source .venv/bin/activate
-pip install flask requests
+pip install flask openai google-api-python-client google-auth-httplib2 google-auth-oauthlib
 python3 main.py
 ```
 

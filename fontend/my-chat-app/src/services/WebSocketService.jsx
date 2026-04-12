@@ -27,6 +27,8 @@ class WebSocketService {
             console.log("STOMP Connected");
             this.connected = true;
 
+            // Subscribe per conversation so chat, AI suggestions, and calendar
+            // updates stay scoped to the current room only.
             this.client.subscribe(`/topic/conversation/${conversationId}`, (message) => {
                 if (onMessage) {
                     onMessage(JSON.parse(message.body));

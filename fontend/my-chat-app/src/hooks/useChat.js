@@ -17,6 +17,8 @@ export const useChat = (conversationId) => {
             return undefined;
         }
 
+        // Each conversation has its own STOMP topics, so reconnect when
+        // the selected conversation changes and reset stale UI state first.
         WebSocketService.connect(conversationId, {
             onMessage: (msg) => {
                 setMessage(prev => [...prev, msg]);
@@ -70,6 +72,7 @@ export const useChat = (conversationId) => {
                 }
 
                 if (items && typeof items === "object") {
+                    // Backend now sends notification objects directly.
                     setCalendarNotification(items);
                 }
             }

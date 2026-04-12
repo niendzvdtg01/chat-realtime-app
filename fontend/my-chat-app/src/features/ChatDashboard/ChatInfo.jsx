@@ -81,6 +81,8 @@ export const ChatInfo = (props) => {
         const loadCalendarNotification = async () => {
             const result = await context.getCalendarNotification(conversationId)
 
+            // Keep a local REST fallback so notification still appears
+            // even if the websocket event is published before subscribe completes.
             if (!ignore && result?.success && result.data) {
                 setCalendarNotificationData(result.data)
             }
@@ -94,6 +96,8 @@ export const ChatInfo = (props) => {
     }, [conversationId, context.getCalendarNotification])
 
 
+    // Prefer live websocket data, then fall back to the notification
+    // fetched directly when the conversation is opened.
     const calendarNotification = props.calendarNotification || calendarNotificationData;
     return (
         <div className="chat-info">

@@ -32,6 +32,8 @@ class CalendarNotification:
         for meeting in meetings:
             data = meeting.get("data") or {}
             if isinstance(data, dict) and data:
+                # Meeting records are stored newest-first, so the first valid
+                # payload is the notification source we want to show.
                 return data
 
         return None
@@ -74,6 +76,8 @@ class CalendarNotification:
         data_json = self._serialize(data)
         latest_meeting = self._extract_latest_meeting(data_json)
 
+        # Return a stable shape for Spring + React instead of asking the model
+        # to rephrase raw JSON into another JSON string.
         return {
             "message": self._build_message(latest_meeting),
             "latest_meeting": latest_meeting

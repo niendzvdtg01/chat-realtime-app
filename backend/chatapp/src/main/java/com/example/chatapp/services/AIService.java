@@ -102,6 +102,8 @@ public class AIService {
             String flaskUrl = "http://localhost:5000/ai/calendar_notification";
             ResponseEntity<Map> response = restTemplate.getForEntity(flaskUrl, Map.class);
             Object reply = response.getBody().get("reply");
+            // Publish to websocket for live clients, but also return the same
+            // payload to REST callers as a fallback path.
             messagingTemplate.convertAndSend("/topic/calendar_notification/" + conversationId, reply);
             return reply;
         } catch (Exception ex) {
