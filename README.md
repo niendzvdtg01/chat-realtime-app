@@ -252,7 +252,7 @@ flowchart TB
         UC[UsersController]
         FC[FriendRequestController]
         GC[GroupChatController]
-        CC[ChatController<br/>+ @MessageMapping]
+        CC["ChatController<br/>+ @MessageMapping"]
         AIC[AIController]
     end
 
@@ -262,7 +262,7 @@ flowchart TB
         FriendS[FriendRequestService]
         GroupS[GroupChatServices]
         ChatS[ChatMessageServices]
-        AIS[AIService<br/>@Async]
+        AIS["AIService<br/>@Async"]
         CloudS[CloudinaryServices]
         ContactS[ContactServices]
     end
