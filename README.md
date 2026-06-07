@@ -721,7 +721,7 @@ sequenceDiagram
     BE->>DB: tìm user, so sánh BCrypt
     DB-->>BE: user
     BE->>BE: jwtUtils.generateToken (HS512, 10h)
-    BE-->>FE: Set-Cookie: access_cookie=<JWT>; HttpOnly
+    BE-->>FE: Set-Cookie: access_cookie=&lt;JWT&gt;; HttpOnly
     FE->>FE: navigate('/chat')
 ```
 
